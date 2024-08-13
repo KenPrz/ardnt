@@ -16,7 +16,7 @@ class LikePostController extends Controller
     public function like(Request $request)
     {
         $post = Post::find($request->post_id);
-        $post->likedByUsers()->attach(auth()->user()->id);
+        // $post->likedByUsers()->attach(auth()->user()->id);
         return redirect()->back();
     }
 
@@ -29,7 +29,7 @@ class LikePostController extends Controller
     public function unlike(Request $request)
     {
         $post = Post::find($request->post_id);
-        $post->likedByUsers()->detach(auth()->user()->id);
+        // $post->likedByUsers()->detach(auth()->user()->id);
         return redirect()->back();
     }
 }
