@@ -18,7 +18,6 @@ import LikeButton from '@/Components/LikeButton.vue';
                 :alt="post.title"
             />
         </div>
-        
         <!-- Post Content -->
         <div class="p-4">
             <!-- Title -->
@@ -28,7 +27,7 @@ import LikeButton from '@/Components/LikeButton.vue';
             
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
-                <span>By {{ post.author_name }}</span>
+                <span>By @{{ post.user.handle }}</span>
                 <span class="mx-2">•</span>
                 <span>{{ new Date(post.created_at).toLocaleDateString() }}</span>
             </div>
@@ -37,10 +36,12 @@ import LikeButton from '@/Components/LikeButton.vue';
             <p class="text-gray-700 mb-4 line-clamp-3">
                 {{ post.excerpt }}
             </p>
-            
             <!-- Interaction Buttons -->
             <div class="flex items-center justify-between">
-                <LikeButton :post_id="post.id" />
+                <LikeButton 
+                    :post_id="post.id"
+                    :is_liked_by_user="post.is_liked_by_user" 
+                />
                 <span class="text-gray-500 text-sm">
                     {{ post.comment_count }} comments
                 </span>
