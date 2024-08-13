@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
             
-            $table->unique(['user_id', 'follower_id']); // Prevent duplicate relationships
+            $table->unique(['user_id', 'follower_id']);
         });
     }
 

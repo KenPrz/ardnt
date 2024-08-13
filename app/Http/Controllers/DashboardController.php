@@ -33,8 +33,7 @@ class DashboardController extends Controller
                                 ->limit(8)
                                 ->get();
 
-
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Feed/NewsFeed', [
             'posts' => $posts,
             'followRecommendations' => $follow_recommendations,
         ]);

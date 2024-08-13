@@ -1,5 +1,12 @@
 <script setup>
 import LikeButton from '@/Components/LikeButton.vue';
+import { defineEmits } from 'vue';
+
+const emit = defineEmits(['sharePost']);
+
+function sharePost(post) {
+    emit('sharePost', post);
+}
     const props = defineProps({
         post: {
             type: Object,
@@ -34,17 +41,24 @@ import LikeButton from '@/Components/LikeButton.vue';
             
             <!-- Excerpt -->
             <p class="text-gray-700 mb-4 line-clamp-3">
-                {{ post.excerpt }}
+                {{ post.content }}
             </p>
             <!-- Interaction Buttons -->
             <div class="flex items-center justify-between">
-                <LikeButton 
-                    :post_id="post.id"
-                    :is_liked_by_user="post.is_liked_by_user" 
-                />
-                <span class="text-gray-500 text-sm">
-                    {{ post.comment_count }} comments
-                </span>
+                <div class="flex space-x-2">
+                    <LikeButton 
+                        :post_id="post.id"
+                        :is_liked_by_user="post.is_liked_by_user" 
+                    />
+                </div>
+                <div class="flex space-x-2 items-center justify-center me-2">
+                    <button class="text-gray-500 text-sm text-md">
+                        {{ post.comment_count }} <i class="pi pi-comment" style="font-size: 1.2em;"></i>
+                    </button>
+                    <button @click="sharePost(post)" class="text-gray-500 text-sm">
+                        <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

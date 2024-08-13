@@ -46,12 +46,50 @@ function throttleHandler(fn, delay) {
 </script>
 <template>
     <div>
-        <button v-if="!props.is_liked_by_user" @click="unlikePost()"
-            class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
-            Unlike
+      <transition name="fade" @before-enter="beforeEnter" @enter="enter" @leave="leave">
+        <button v-if="props.is_liked_by_user" @click="likePost()"
+            class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
+            <i class="pi pi-heart" style="font-size: 1.2em;"></i>
         </button>
-        <button v-else @click="likePost()" class="text-blue-600 hover:text-red-800 font-semibold text-sm">
-            Like
+        <button v-else @click="unlikePost()"
+            class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
+            <i class="pi pi-heart-fill" style="font-size: 1.2em;"></i>
         </button>
+      </transition>
     </div>
-</template>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      is_liked_by_user: Boolean
+    },
+    methods: {
+      beforeEnter(el) {
+        el.style.opacity = 0;
+      },
+      enter(el, done) {
+        el.offsetHeight;
+        el.style.transition = 'opacity 0.5s';
+        el.style.opacity = 1;
+        done();
+      },
+      leave(el, done) {
+        el.style.transition = 'opacity 0.5s';
+        el.style.opacity = 0;
+        done();
+      }
+    }
+  }
+  </script>
+  
+  <style scoped>
+  /* Transition classes */
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0;
+  }
+  </style>
+  
