@@ -34,9 +34,15 @@ function sharePost(post) {
             
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
-                <span>By @{{ post.user.handle }}</span>
+                <a href="google.com" class="hover:underline"> 
+                    <!-- route('user.profile', post.user.id) -->
+                    <span>@{{ post.user.handle }}</span>
+                </a>
                 <span class="mx-2">•</span>
                 <span>{{ new Date(post.created_at).toLocaleDateString() }}</span>
+                <span class="mx-2">•</span>
+                <i v-if="post.is_public" class="pi pi-globe" style="font-size: .8em;"></i>
+                <i v-else class="pi pi-lock" style="font-size: .8em;"></i>
             </div>
             
             <!-- Excerpt -->

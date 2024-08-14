@@ -30,7 +30,7 @@ class PostFactory extends Factory
             "content" => $this->faker->paragraph,
             "theme_id" => rand(1, $num_of_themes),
             'is_public' => $this->faker->boolean(50), // 50% chance of being public
-            "cover_image" => $this->faker->imageUrl(),
+            "cover_image" => $this->faker->imageUrl($width = rand(100, 1000), $height = rand(100, 1000)),
             "is_shared" => $isShared,
             "shared_post_id" => $isShared ? $this->faker->numberBetween(1, $num_of_posts) : null, // Assign a valid post ID if it's a shared post
         ];
