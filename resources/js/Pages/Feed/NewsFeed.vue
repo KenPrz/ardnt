@@ -80,7 +80,7 @@ function closeShareModal() {
                         :post="post"
                     />
                 </template>
-                <div class="">
+                <div class="px-48">
                     <Pagination
                             :first_page_url="posts.first_page_url"
                             :from="posts.from"

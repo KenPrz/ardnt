@@ -13,7 +13,7 @@ class Like extends Model
     // Define the fields that are mass assignable
     protected $fillable = [
         'user_id',
-        'post_id'
+        'post_id',
     ];
 
     public function user()

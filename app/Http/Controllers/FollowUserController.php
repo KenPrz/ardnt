@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\UserFollower;
-use PhpParser\Node\Expr\Throw_;
+use Illuminate\Http\Request;
 
 class FollowUserController extends Controller
 {
@@ -12,12 +11,12 @@ class FollowUserController extends Controller
     {
         $user = auth()->user();
         $follower = UserFollower::create([
-                        'user_id' => $request->user_id,
-                        'follower_id' => $user->id
-                    ]);
-        if($follower){
-            return back()->with('success','User followed successfully');
-        }else{
+            'user_id' => $request->user_id,
+            'follower_id' => $user->id,
+        ]);
+        if ($follower) {
+            return back()->with('success', 'User followed successfully');
+        } else {
             throw new \Exception('Failed to follow user');
         }
     }

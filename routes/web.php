@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\FollowUserController;
+use App\Http\Controllers\LikePostController;
+use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-use App\Http\Controllers\NewsFeedController;
-use App\Http\Controllers\LikePostController;
-use App\Http\Controllers\FollowUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +27,6 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [NewsFeedController::class, 'index'])->name('dashboard');

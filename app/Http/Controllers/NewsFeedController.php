@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Post;
-use App\Models\Theme;
-use App\Models\UserFollower;
+use App\Models\{
+    Post,
+    Theme,
+    UserFollower,
+};
 use Inertia\Inertia;
 
 class NewsFeedController extends Controller
@@ -18,19 +19,29 @@ class NewsFeedController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
+
         // Get IDs of the followers of the authenticated user
-        $followerIds = UserFollower::where("user_id", $user->id)
+        $followerIds = UserFollower::where('user_id', $user->id)
             ->where('users.deleted_at', null)
             ->join('users', 'users.id', '=', 'user_follower.follower_id')
             ->pluck('follower_id')
             ->toArray();
 
-        // Fetch posts from the followers
-        $posts = Post::whereIn('user_id', $followerIds)
-            ->with('user', 'comments.user', 'likedByUsers', 'originalPost', 'shares')
-            ->latest()
-            ->paginate(10);
+        $followerCount = count($followerIds);
+
+        // Define thresholds for follower count
+        $smallFollowerThreshold = 5; // Adjust this value as needed
+
+        if ($followerCount == 0) {
+            // Case: User has zero followers
+            $posts = $this->getPublicPosts();
+        } elseif ($followerCount <= $smallFollowerThreshold) {
+            // Case: User has a small number of followers
+            $posts = $this->getPublicPosts();
+        } else {
+            // Case: User has a regular number of followers
+            $posts = $this->getAllPosts($followerIds);
+        }
 
         // Check if each post is liked by the authenticated user
         foreach ($posts as $post) {
@@ -49,11 +60,12 @@ class NewsFeedController extends Controller
     /**
      * Retrieves recommended followers for a user.
      *
-     * @param int $user_id The ID of the user.
-     * @param array $followerIds An array of follower IDs.
+     * @param  int  $user_id  The ID of the user.
+     * @param  array  $followerIds  An array of follower IDs.
      * @return \Illuminate\Support\Collection A collection of recommended followers.
      */
-    private function getRecommendedFollowers($user_id, $followerIds) {
+    private function getRecommendedFollowers($user_id, $followerIds)
+    {
         $follow_recommendations = UserFollower::where('user_id', '!=', $user_id)
             ->whereNotIn('follower_id', $followerIds)
             ->with(['follower:id,name,handle,avatar'])
@@ -69,9 +81,24 @@ class NewsFeedController extends Controller
                 ];
             })
             ->unique('user_id'); // Ensure unique 'user_id'
-    
+
         return $follow_recommendations;
     }
-    
 
+    private function getPublicPosts()
+    {
+        return Post::where('is_public', true)
+            ->with('user', 'comments.user', 'likedByUsers', 'originalPost', 'shares')
+            ->latest()
+            ->paginate(10);
+    }
+
+    private function getAllPosts($followerIds)
+    {
+        return Post::whereIn('user_id', $followerIds)
+            ->orWhere('is_public', true)
+            ->with('user', 'comments.user', 'likedByUsers', 'originalPost', 'shares')
+            ->latest()
+            ->paginate(10);
+    }
 }

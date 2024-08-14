@@ -64,14 +64,14 @@ class Post extends Model
     /**
      * Check if the post is not liked by a specific user.
      *
-     * @param int $user_id The ID of the user.
+     * @param  int  $user_id  The ID of the user.
      * @return bool Returns true if the post is not liked by the user, false otherwise.
      */
     public function isNotLikedByUser($user_id): bool
     {
-        return !$this->likedByUsers->contains($user_id);
+        return ! $this->likedByUsers->contains($user_id);
     }
-    
+
     /**
      * Get the original post that this post belongs to.
      *

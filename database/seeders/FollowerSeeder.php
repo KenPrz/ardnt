@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use app\Models\User;
+use Illuminate\Database\Seeder;
+
 class FollowerSeeder extends Seeder
 {
     /**
@@ -19,14 +19,14 @@ class FollowerSeeder extends Seeder
             $toFollow = $users->where('id', '!=', $user->id)
                 ->filter(function ($potentialFollow) use ($user) {
                     // Check if the user is not already following the potential user
-                    return !$user->following()->where('follower_id', $potentialFollow->id)
+                    return ! $user->following()->where('follower_id', $potentialFollow->id)
                         ->exists();
                 })
                 ->random(rand(2, 5))
                 ->pluck('id');
-            
+
             $user->following()->attach($toFollow);
         });
-        
+
     }
 }

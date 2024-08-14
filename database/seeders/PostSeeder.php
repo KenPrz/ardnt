@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Post;
 use App\Models\Comment;
-use Illuminate\Database\Seeder;
+use App\Models\Post;
 use app\Models\User;
+use Illuminate\Database\Seeder;
+
 class PostSeeder extends Seeder
 {
     /**
@@ -14,14 +15,14 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
-        
+
         // Create posts for each user
         $users->each(function ($user) {
             $user->posts()->saveMany(Post::factory()->count(rand(1, 10))->make());
         });
-        
+
         $posts = Post::all();
-        
+
         $posts->each(function ($post) use ($users) {
             if ($post->is_public) {
                 // Public posts can be liked by any random users
@@ -29,11 +30,11 @@ class PostSeeder extends Seeder
             } else {
                 // Non-public posts can only be liked by the user's followers
                 $userFollowers = $post->user->followers;
-                $randomUsers = $userFollowers->isNotEmpty() 
+                $randomUsers = $userFollowers->isNotEmpty()
                     ? $userFollowers->random(rand(1, min(5, $userFollowers->count())))
-                    : collect(); // No likes if no followers 
+                    : collect(); // No likes if no followers
             }
-            
+
             // Assign likes
             $randomUsers->each(function ($user) use ($post) {
                 $user->likedPosts()->attach($post->id);
@@ -59,5 +60,3 @@ class PostSeeder extends Seeder
         });
     }
 }
-
-

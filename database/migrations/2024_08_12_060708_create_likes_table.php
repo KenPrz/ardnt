@@ -17,11 +17,10 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->unique(['user_id', 'post_id']);
         });
     }
-    
 
     /**
      * Reverse the migrations.
