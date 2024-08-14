@@ -59,14 +59,14 @@ function closeShareModal() {
                     :themes="themes"
                 />
         </Modal>
-        <div class="mx-10 md:max-w-7xl sm:px-10 md:px-72 mt-10">
+        <div class="mx-10 md:max-w-7xl sm:max-w-5xl sm:px-16 lg:px-48 xl:px-64 mt-10">
             <div class="flex justify-between items-center py-3">
                 <button @click="createPost"
                         class="w-full flex justify-between items-center 
                         py-5 px-5 bg-gray-300 rounded-xl hover:bg-gray-400
                         transition-colors duration-200">
                     <span class="font-semibold">Create Post</span>
-                    <i class="pi pi-plus" style="font-size: 1.2em;"></i>
+                    <i class="pi pi-pencil" style="font-size: 1.2em;"></i>
                 </button>
             </div>
             <div class="py-3 space-y-5">

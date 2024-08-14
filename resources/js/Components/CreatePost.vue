@@ -1,9 +1,10 @@
 <script setup>
 import { ref, watch, defineEmits } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import Editor from '@/Components/Editor.vue';
 
 const emit = defineEmits(['close']);
-
+const blogContent = ref('Write something amazing...');
 const props = defineProps({
     themes: {
         type: Array,
@@ -39,6 +40,18 @@ const handleFileChange = (event) => {
 const removeFile = () => {
     form.cover_image = null;
 };
+
+function submitPost() {
+    form.content = blogContent.value;
+    form.post(route('post.store'),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                emit('close');
+            }
+        });
+}
 </script>
 
 <template>
@@ -62,23 +75,30 @@ const removeFile = () => {
                 </button>
             </div>
         </div>
-        <div class="mt-5">
-            <textarea
-                v-model="form.content"
-                class="w-full h-32 p-3 border border-gray-300 rounded-lg"
-                placeholder="What's on your mind?"
-            ></textarea>
+        <div class="mt-5 w-full">
+            <Editor v-model="blogContent" >
+                <select
+                    v-model="form.theme"
+                    class="w-3/4 border border-gray-300 rounded-lg mb-2"
+                >
+                    <option value="" disabled>Select a theme</option>
+                    <option v-for="theme in themes" :key="theme.id" :value="theme.id">
+                        {{ theme.name }}
+                    </option>
+                </select>
+            </Editor>
         </div>
         <div class="mt-5">
-            <select
-                v-model="form.theme"
-                class="w-full p-3 border border-gray-300 rounded-lg"
+            
+        </div>
+        <div class="mt-5">
+            <button
+                @click="submitPost"
+                class="w-full p-3 text-black rounded-lg flex justify-between items-center"
             >
-                <option value="" disabled>Select a theme</option>
-                <option v-for="theme in themes" :key="theme.id" :value="theme.id">
-                    {{ theme.name }}
-                </option>
-            </select>
+                <span>Create Post</span>
+                <i class="pi pi-pencil" style="font: 1.2em;"></i>
+            </button>
         </div>
     </div>
 </template>
