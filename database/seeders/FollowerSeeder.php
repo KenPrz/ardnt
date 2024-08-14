@@ -15,10 +15,18 @@ class FollowerSeeder extends Seeder
         // Get all users
         $users = User::all();
 
-        // Each user will follow 2-5 other users
         $users->each(function ($user) use ($users) {
-            $toFollow = $users->where('id', '!=', $user->id)->random(rand(2, 5))->pluck('id');
+            $toFollow = $users->where('id', '!=', $user->id)
+                ->filter(function ($potentialFollow) use ($user) {
+                    // Check if the user is not already following the potential user
+                    return !$user->following()->where('follower_id', $potentialFollow->id)
+                        ->exists();
+                })
+                ->random(rand(2, 5))
+                ->pluck('id');
+            
             $user->following()->attach($toFollow);
         });
+        
     }
 }

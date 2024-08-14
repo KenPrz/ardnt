@@ -40,6 +40,9 @@ function sharePost(post) {
                 </a>
                 <span class="mx-2">•</span>
                 <span>{{ new Date(post.created_at).toLocaleDateString() }}</span>
+                <span class="mx-2">•</span>
+                <i v-if="post.is_public" class="pi pi-globe" style="font-size: .8em;"></i>
+                <i v-else class="pi pi-lock" style="font-size: .8em;"></i>
             </div>
             
             <!-- Excerpt -->

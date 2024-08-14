@@ -1,9 +1,11 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Modal from '@/Components/Modal.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Modal from '@/Components/Modal.vue';
+import Pagination from '@/Components/Pagination.vue';
 import PostBox from '@/Components/PostBox.vue';
+import FollowerBox from './Partials/FollowerBox.vue';
 import SharePost from '@/Components/SharePost.vue';
 import CreatePost from '@/Components/CreatePost.vue';
 const props = defineProps({
@@ -12,7 +14,7 @@ const props = defineProps({
         required: true,
     },
     followRecommendations: {
-        type: Array,
+        type: Object,
         required: true,
     },
     themes: {
@@ -70,12 +72,23 @@ function closeShareModal() {
                 </button>
             </div>
             <div class="py-3 space-y-5">
+                <FollowerBox 
+                    :suggestedFollowers="followRecommendations" />
                 <template v-for="post in posts.data" :key="post.id">
                     <PostBox 
                         @sharePost="sharePost"
                         :post="post"
                     />
                 </template>
+                <div class="">
+                    <Pagination
+                            :first_page_url="posts.first_page_url"
+                            :from="posts.from"
+                            :last_page="posts.last_page"
+                            :last_page_url="posts.last_page_url"
+                            :links="posts.links"
+                        />
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
