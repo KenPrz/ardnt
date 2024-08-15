@@ -52,7 +52,10 @@ function closeShareModal() {
             <SharePost :post="postToShare" />
         </Modal>
         <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
-            <CreatePost :themes="themes" />
+            <CreatePost
+                @close="closeCreatePostModal"
+                :themes="themes"
+            />
         </Modal>
         <div class="mx-auto w-full max-w-xl px-4">
             <div class="flex flex-col w-full">

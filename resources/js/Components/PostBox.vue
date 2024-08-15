@@ -21,7 +21,7 @@ function sharePost(post) {
         <div class="w-full h-72">
             <img 
                 class="object-cover w-full h-full rounded-t-lg"
-                :src="post.cover_image" 
+                :src="post.cover_image"
                 :alt="post.title"
             />
         </div>
@@ -46,7 +46,7 @@ function sharePost(post) {
             
             <!-- Excerpt -->
             <p class="text-gray-700 mb-4 line-clamp-3">
-                {{ post.content }}
+                <div v-html="props.post.content"></div>
             </p>
             <!-- Interaction Buttons -->
             <div class="flex items-center justify-between">
