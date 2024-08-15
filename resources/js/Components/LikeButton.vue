@@ -48,12 +48,14 @@ function throttleHandler(fn, delay) {
     <div>
       <transition name="fade" @before-enter="beforeEnter" @enter="enter" @leave="leave">
         <button v-if="props.is_liked_by_user" @click="likePost()"
+            id="like-button"
             class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
             <i class="pi pi-heart" style="font-size: 1.2em;"></i>
         </button>
         <button v-else @click="unlikePost()"
+            id="unlike-button"
             class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
-            <i class="pi pi-heart-fill" style="font-size: 1.2em;"></i>
+            <i class="pi pi-heart-fill" style="font-size: 1.2em; color: red; "></i>
         </button>
       </transition>
     </div>

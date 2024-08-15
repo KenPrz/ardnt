@@ -9,13 +9,33 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <style>
+            /* width */
+            ::-webkit-scrollbar {
+            width: 4px;
+            }
 
+            /* Track */
+            ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            }
+
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+            background: #888; 
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+            }
+        </style>
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-customSans antialiased">
         @inertia
     </body>
 </html>

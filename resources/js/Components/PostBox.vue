@@ -16,9 +16,9 @@ function sharePost(post) {
 </script>
 
 <template>
-    <div class="flex flex-col rounded-lg shadow-lg overflow-hidden w-full bg-white">
+    <div class="flex flex-col rounded-lg shadow-lg overflow-hidden w-full bg-white mb-5">
         <!-- Post Image -->
-        <div class="w-full h-48">
+        <div class="w-full h-72">
             <img 
                 class="object-cover w-full h-full rounded-t-lg"
                 :src="post.cover_image" 
@@ -28,10 +28,9 @@ function sharePost(post) {
         <!-- Post Content -->
         <div class="p-4">
             <!-- Title -->
-            <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+            <h2 class="text-2xl font-customSerif font-semibold text-maroon-600 mb-2">
                 {{ post.title }}
             </h2>
-            
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
                 <a href="google.com" class="hover:underline"> 

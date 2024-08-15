@@ -16,9 +16,10 @@ class DatabaseSeeder extends Seeder
         // Create users first
         User::factory(100)->create();
         User::factory()->create([
-            'name' => 'Test User',
+            'first_name' => 'Test',
+            'last_name' => 'User',
             'email' => 'test@example.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('test@example.com'),
         ]);
 
         // Optionally: Create themes if they are used in posts

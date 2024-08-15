@@ -3,6 +3,7 @@
 use App\Http\Controllers\FollowUserController;
 use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\NewsFeedController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/unlike-post', [LikePostController::class, 'unlike'])->name('post.unlike');
     Route::post('/follow-user', [FollowUserController::class, 'follow'])->name('user.follow');
     Route::delete('/unfollow-user', [FollowUserController::class, 'unfollow'])->name('user.unfollow');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 });
 
 //auth routes

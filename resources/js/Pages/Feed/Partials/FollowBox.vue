@@ -30,15 +30,16 @@ function followUser(user_id) {
 </script>
 <template>
     <div class="w-full bg-white rounded-lg shadow-sm py-2 px-4">
-        <h1 class="font-semibold text-lg">Who to follow</h1>
-        <div class="mt-4 flex flex-col space-y-2">
+        <h1 class="font-semibold text-lg mt-2">Who to follow</h1>
+        <div class="mt-4 flex flex-col space-y-2 py-2">
             <UserFollowCard 
                 v-for="follower in suggestedFollowers"
                 :key="follower.id" v-bind="follower" 
                 @follow="followUser" 
-                :user_id="follower.user_id"
+                :user_id="follower.id"
                 :handle = "follower.handle"
-                :name = "follower.name"
+                :first_name = "follower.first_name"
+                :last_name = "follower.last_name"
                 :avatar = "follower.avatar"    
             />
         </div>

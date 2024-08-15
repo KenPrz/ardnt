@@ -5,7 +5,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import Pagination from '@/Components/Pagination.vue';
 import PostBox from '@/Components/PostBox.vue';
-import FollowerBox from './Partials/FollowerBox.vue';
+import FollowBox from './Partials/FollowBox.vue';
 import SharePost from '@/Components/SharePost.vue';
 import CreatePost from '@/Components/CreatePost.vue';
 const props = defineProps({
@@ -45,51 +45,42 @@ function closeShareModal() {
 </script>
 
 <template>
+
     <Head title="Dashboard" />
     <AuthenticatedLayout>
-        <Modal
-            maxWidth="md"
-            :show="showShareModal" 
-            @close="closeShareModal">
-                <SharePost :post="postToShare" />
+        <Modal maxWidth="md" :show="showShareModal" @close="closeShareModal">
+            <SharePost :post="postToShare" />
         </Modal>
-        <Modal
-            maxWidth="2xl"
-            :show="showCreatePostModal"
-            @close="closeCreatePostModal">
-                <CreatePost 
-                    :themes="themes"
-                />
+        <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
+            <CreatePost :themes="themes" />
         </Modal>
-        <div class="mx-10 md:max-w-7xl sm:max-w-5xl sm:px-16 lg:px-48 xl:px-64 mt-10">
-            <div class="flex justify-between items-center py-3">
-                <button @click="createPost"
-                        class="w-full flex justify-between items-center 
-                        py-5 px-5 bg-gray-300 rounded-xl hover:bg-gray-400
+        <div class="mx-auto w-full max-w-xl px-4">
+            <div class="flex flex-col w-full">
+                <div class="flex justify-between items-center py-3">
+                    <button @click="createPost" class="w-full flex justify-between items-center 
+                        py-5 px-5 bg-maroon-400 rounded-xl hover:bg-maroon-500
                         transition-colors duration-200">
-                    <span class="font-semibold">Create Post</span>
-                    <i class="pi pi-pencil" style="font-size: 1.2em;"></i>
-                </button>
-            </div>
-            <div class="py-3 space-y-5">
-                <FollowerBox 
-                    :suggestedFollowers="followRecommendations" />
-                <template v-for="post in posts.data" :key="post.id">
-                    <PostBox 
-                        @sharePost="sharePost"
-                        :post="post"
-                    />
-                </template>
-                <div class="px-48">
-                    <Pagination
-                            :first_page_url="posts.first_page_url"
-                            :from="posts.from"
-                            :last_page="posts.last_page"
-                            :last_page_url="posts.last_page_url"
-                            :links="posts.links"
-                        />
+                        <span class="font-semibold text-white">Create Post</span>
+                        <i class="pi pi-pencil" style="font-size: 1.2em; color: white;"></i>
+                    </button>
+                </div>
+                <div class="flex-col 2xl:flex py-3 space-y-5">
+                    <div class="2xl:w-3/12 2xl:absolute 2xl:right-16 mt-5">
+                        <FollowBox v-show="followRecommendations != 0" :suggestedFollowers="followRecommendations" />
+                    </div>
+                    <div class="w-full">
+                        <template v-for="post in posts.data" :key="post.id">
+                            <PostBox @sharePost="sharePost" :post="post" />
+                        </template>
+                        <div class="px-4">
+                            <Pagination :first_page_url="posts.first_page_url" :from="posts.from"
+                                :last_page="posts.last_page" :last_page_url="posts.last_page_url"
+                                :links="posts.links" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

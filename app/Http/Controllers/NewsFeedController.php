@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{
-    Post,
-    Theme,
-    UserFollower,
-};
+use App\Models\Post;
+use App\Models\Theme;
+use App\Models\User;
+use App\Models\UserFollower;
 use Inertia\Inertia;
 
 class NewsFeedController extends Controller
@@ -50,7 +49,7 @@ class NewsFeedController extends Controller
 
         return Inertia::render('Feed/NewsFeed', [
             'posts' => $posts,
-            'followRecommendations' => $this->getRecommendedFollowers($user->id, $followerIds),
+            'followRecommendations' => $this->getRecommendedFollowers($user->id),
             'themes' => Theme::all(),
             'hasMorePages' => $posts->hasMorePages(),
             'nextPageUrl' => $posts->nextPageUrl(),
@@ -61,26 +60,18 @@ class NewsFeedController extends Controller
      * Retrieves recommended followers for a user.
      *
      * @param  int  $user_id  The ID of the user.
-     * @param  array  $followerIds  An array of follower IDs.
      * @return \Illuminate\Support\Collection A collection of recommended followers.
      */
-    private function getRecommendedFollowers($user_id, $followerIds)
+    private function getRecommendedFollowers($user_id)
     {
-        $follow_recommendations = UserFollower::where('user_id', '!=', $user_id)
-            ->whereNotIn('follower_id', $followerIds)
-            ->with(['follower:id,name,handle,avatar'])
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get()
-            ->map(function ($userFollower) {
-                return [
-                    'user_id' => $userFollower->follower->id,
-                    'handle' => $userFollower->follower->handle,
-                    'name' => $userFollower->follower->name,
-                    'avatar' => $userFollower->follower->avatar,
-                ];
-            })
-            ->unique('user_id'); // Ensure unique 'user_id'
+        $follow_recommendations = User::select('id', 'first_name', 'last_name', 'avatar', 'handle')
+            ->whereNotIn('id', function ($query) use ($user_id) {
+                $query->select('user_id')
+                    ->from('user_follower')
+                    ->where('follower_id', $user_id);
+            })->where('id', '!=', $user_id)
+            ->limit(5)
+            ->get();
 
         return $follow_recommendations;
     }
