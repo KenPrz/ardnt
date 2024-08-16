@@ -1,6 +1,11 @@
 <script setup>
 import CommentCard from './CommentCard.vue';
+import CommentCreate from './CommentCreate.vue';
     const props = defineProps({
+        post_id: {
+            type: Number,
+            required: true,
+        },
         comments: {
             type: Object,
             required: true,
@@ -12,10 +17,16 @@ import CommentCard from './CommentCard.vue';
         <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-800">Comments</h3>
         </div>
-        <div class="flex flex-col space-y-3 border-b max-h-48 overflow-y-auto">
-            <CommentCard v-for="comment in props.comments" 
-                :key="comment.id" 
+        <div class="flex flex-col space-y-3 max-h-48 overflow-y-auto">
+            <p v-show="props.comments==0" class="text-gray-500 text-sm">No comments yet</p>
+            <CommentCard v-show="props.comments!=0" v-for="comment in props.comments" 
+                :key="comment.id"
                 :comment="comment" 
+            />
+        </div>
+        <div class="flex w-full">
+            <CommentCreate 
+                :post_id="props.post_id"
             />
         </div>
     </div>

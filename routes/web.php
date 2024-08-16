@@ -6,6 +6,7 @@ use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ViewUsersController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,8 +39,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/unfollow-user', [FollowUserController::class, 'unfollow'])->name('user.unfollow');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('posts.show');
-
     Route::get('/users/{user}', [ViewUsersController::class, 'show'])->name('users.show');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::patch('/comments', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comment', [CommentController::class,'destroy'])->name('comments.destroy');
 });
 
 //auth routes

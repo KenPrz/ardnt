@@ -88,7 +88,9 @@ function toggleComments() {
                 <!-- Comments Container -->
                 <transition name="fade">
                     <div v-if="isCommentsOpen" class="flex flex-col space-y-2">
-                        <CommentsContainer :comments="props.post.comments" />
+                        <CommentsContainer
+                            :post_id="props.post.id"
+                            :comments="props.post.comments" />
                     </div>
                 </transition>
             </div>
