@@ -1,31 +1,48 @@
 <script setup>
+import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
-import { defineEmits } from 'vue';
+import Modal from '@/Components/Modal.vue';
+import ViewPost from '@/Pages/Post/ViewPost.vue';
 
 const emit = defineEmits(['sharePost']);
 
 function sharePost(post) {
     emit('sharePost', post);
 }
-    const props = defineProps({
-        post: {
-            type: Object,
-            required: true,
-        }
-    });
+
+const props = defineProps({
+    post: {
+        type: Object,
+        required: true,
+    }
+});
+
+// Reactive variables for modal and comments
+const showViewPostModal = ref(false);
+const openComments = ref(false);
+
+// Function to open the modal and control comment state
+function viewPost(showComments) {
+    openComments.value = showComments; // Set the boolean value directly
+    showViewPostModal.value = true;    // Open the modal
+}
+
+// Function to close the modal
+function closeViewPostModal() {
+    showViewPostModal.value = false;
+}
 </script>
 
 <template>
     <div class="flex flex-col rounded-lg shadow-lg overflow-hidden w-full bg-white mb-5">
         <!-- Post Image -->
         <div class="w-full h-72">
-            <a :href="route('posts.show',post.id)">
-                <img 
-                    class="object-cover w-full h-full rounded-t-lg"
-                    :src="post.cover_image"
-                    :alt="post.title"
-                />
-            </a>
+            <img 
+                @click="viewPost(false)"
+                class="object-cover w-full h-full rounded-t-lg hover:cursor-pointer"
+                :src="post.cover_image"
+                :alt="post.title"
+            />
         </div>
         <!-- Post Content -->
         <div class="p-4">
@@ -35,8 +52,7 @@ function sharePost(post) {
             </h2>
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
-                <a href="google.com" class="hover:underline"> 
-                    <!-- route('user.profile', post.user.id) -->
+                <a :href="route('users.show', post.user.id)" class="hover:underline">
                     <span>@{{ post.user.handle }}</span>
                 </a>
                 <span class="mx-2">•</span>
@@ -48,25 +64,40 @@ function sharePost(post) {
             
             <!-- Excerpt -->
             <p class="text-gray-700 mb-4 line-clamp-3">
-                <div v-html="props.post.content"></div>
+                <div v-html="post.content"></div>
             </p>
+            
             <!-- Interaction Buttons -->
             <div class="flex items-center justify-between">
                 <div class="flex space-x-2">
-                    <LikeButton 
+                    <LikeButton
+                        :likes_count="post.liked_by_users_count"
                         :post_id="post.id"
                         :is_liked_by_user="post.is_liked_by_user" 
                     />
                 </div>
-                <div class="flex space-x-2 items-center justify-center me-2">
-                    <button class="text-gray-500 text-sm text-md">
-                        {{ post.comment_count }} <i class="pi pi-comment" style="font-size: 1.2em;"></i>
+                <div class="flex items-center justify-center space-x-2 me-2">
+                    <!-- Comments Button -->
+                    <button 
+                        @click="viewPost(true)"
+                        class="text-gray-500 text-sm flex items-center space-x-1">
+                        <i class="pi pi-comment" style="font-size: 1.2em;"></i>
+                        <span>{{ post.comments_count }}</span>
                     </button>
-                    <button @click="sharePost(post)" class="text-gray-500 text-sm">
+                    
+                    <!-- Share Button -->
+                    <button @click="sharePost(post)" class="text-gray-500 text-sm flex items-center">
                         <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal for viewing post -->
+    <Modal maxWidth="xl" :show="showViewPostModal" @close="closeViewPostModal">
+        <ViewPost
+            @sharePost="sharePost"
+            :openComments="openComments"
+            :post="post" />
+    </Modal>
 </template>

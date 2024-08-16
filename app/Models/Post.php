@@ -68,9 +68,9 @@ class Post extends Model
      * @param  int  $user_id  The ID of the user.
      * @return bool Returns true if the post is not liked by the user, false otherwise.
      */
-    public function isNotLikedByUser($user_id): bool
+    public function isLikedByUser($user_id): bool
     {
-        return ! $this->likedByUsers->contains($user_id);
+        return $this->likedByUsers->contains($user_id);
     }
 
     /**
@@ -101,5 +101,26 @@ class Post extends Model
     public function theme()
     {
         return $this->belongsTo(Theme::class, 'theme_id');
+    }
+
+    /**
+     * Scope to eager load relations and get counts for comments and likes.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithRelationsAndCounts($query)
+    {
+        return $query->with([
+            'user',
+            'comments' => function ($query) {
+                $query->latest('created_at')->take(100);  // Limit to 100 latest comments (change as needed)
+            },
+            'comments.user',
+            'likedByUsers',
+            'originalPost',
+            'shares',
+        ])
+            ->withCount(['comments', 'likedByUsers']);  // Get comment and like counts
     }
 }

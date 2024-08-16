@@ -44,7 +44,7 @@ class NewsFeedController extends Controller
 
         // Check if each post is liked by the authenticated user
         foreach ($posts as $post) {
-            $post->is_liked_by_user = $post->isNotLikedByUser($user->id);
+            $post->is_liked_by_user = $post->isLikedByUser($user->id);
         }
 
         return Inertia::render('Feed/NewsFeed', [
@@ -76,19 +76,30 @@ class NewsFeedController extends Controller
         return $follow_recommendations;
     }
 
+    /**
+     * Retrieve public posts with related data.
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     private function getPublicPosts()
     {
         return Post::where('is_public', true)
-            ->with('user', 'comments.user', 'likedByUsers', 'originalPost', 'shares')
+            ->withRelationsAndCounts()
             ->latest()
             ->paginate(10);
     }
 
+    /**
+     * Retrieve all posts from the database based on the given follower IDs.
+     *
+     * @param  array  $followerIds  The IDs of the followers.
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator The paginated list of posts.
+     */
     private function getAllPosts($followerIds)
     {
         return Post::whereIn('user_id', $followerIds)
             ->orWhere('is_public', true)
-            ->with('user', 'comments.user', 'likedByUsers', 'originalPost', 'shares')
+            ->withRelationsAndCounts()
             ->latest()
             ->paginate(10);
     }

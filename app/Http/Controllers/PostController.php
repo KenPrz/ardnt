@@ -48,19 +48,20 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a specific post.
+     *
+     * @param  string  $id  The ID of the post.
+     * @return \Inertia\Response The rendered view of the post.
      */
     public function show(string $id)
     {
-        $post = Post::findOrFail($id)
-                ->with('user', 
-                'comments.user', 
-                'likedByUsers',
-                'originalPost', 
-                'shares')->first();
-            dd($post);
-        return Inertia::render('Post/View', [
+        $post = Post::withRelationsAndCounts()
+            ->findOrFail($id);
 
+        $post->is_liked_by_user = $post->isLikedByUser(auth()->id());
+
+        return Inertia::render('Post/ViewPost', [
+            'post' => $post,
         ]);
     }
 

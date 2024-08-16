@@ -29,7 +29,7 @@ class PostFactory extends Factory
             '<p>Welcome to my post! This is paragraph one.</p><p>This is the second paragraph with <strong><em>bold and italic</em></strong> text.</p><p>And here\'s a third paragraph for good measure.</p>',
             '<p>Let\'s start with this opening paragraph.</p><p>Now, here\'s our second paragraph with some <strong>important information</strong>.</p><p>And a final thought in the third paragraph, featuring <em>emphasized text</em>.</p>',
             '<p>First paragraph: Introducing the topic of <strong>web development</strong>.</p><p>Second paragraph: It\'s an <em>exciting</em> field with many opportunities.</p><p>Third paragraph: Always stay updated with <s>old</s> new technologies.</p>',
-            '<p>Opening statement: Here\'s an interesting <strong>fact</strong>.</p><p>The details: Did you know that the average person spends <em>6 months</em> of their life waiting for traffic lights to change?</p>'
+            '<p>Opening statement: Here\'s an interesting <strong>fact</strong>.</p><p>The details: Did you know that the average person spends <em>6 months</em> of their life waiting for traffic lights to change?</p>',
         ];
 
         return [

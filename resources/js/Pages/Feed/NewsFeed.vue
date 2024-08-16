@@ -22,10 +22,13 @@ const props = defineProps({
         required: true,
     },
 });
+
+// modal state
 const showShareModal = ref(false);
 const showCreatePostModal = ref(false);
-const postToShare = ref(null);
 
+// modal data
+const postToShare = ref(null);
 
 function createPost() {
     showCreatePostModal.value = true;
@@ -45,7 +48,6 @@ function closeShareModal() {
 </script>
 
 <template>
-
     <Head title="Dashboard" />
     <AuthenticatedLayout>
         <Modal maxWidth="md" :show="showShareModal" @close="closeShareModal">
@@ -73,7 +75,9 @@ function closeShareModal() {
                     </div>
                     <div class="w-full">
                         <template v-for="post in posts.data" :key="post.id">
-                            <PostBox @sharePost="sharePost" :post="post" />
+                            <PostBox 
+                                @sharePost="sharePost"
+                                :post="post" />
                         </template>
                         <div class="px-4">
                             <Pagination :first_page_url="posts.first_page_url" :from="posts.from"
@@ -84,6 +88,5 @@ function closeShareModal() {
                 </div>
             </div>
         </div>
-
     </AuthenticatedLayout>
 </template>

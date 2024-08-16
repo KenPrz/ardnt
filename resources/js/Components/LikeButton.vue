@@ -9,6 +9,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  likes_count: {
+    type: Number,
+    required: true,
+  },
 });
 const form = useForm({
   post_id: props.post_id,
@@ -47,21 +51,20 @@ function throttleHandler(fn, delay) {
 <template>
   <div>
     <transition name="fade" @before-enter="beforeEnter" @enter="enter" @leave="leave">
-      <div>
+      <div class="flex space-x-2 items-center justify-center">
         <button :disabled="form.processing" v-if="props.is_liked_by_user" @click="unlikePost()" id="unlike-button"
           class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
-          <i class="pi pi-heart-fill" style="font-size: 1.2em; color: red;"></i>
+          <i class="pi pi-heart-fill" style="font-size: 1.2em; color: red; padding-top: 5px"></i>
         </button>
         <button :disabled="form.processing" v-else @click="likePost()" id="like-button"
           class="text-maroon-600 hover:text-maroon-800 font-semibold text-sm">
-          <i class="pi pi-heart" style="font-size: 1.2em;"></i>
+          <i class="pi pi-heart" style="font-size: 1.2em; padding-top: 5px;"></i>
         </button>
+        <span class="text-sm font-light">{{ likes_count }}</span>
       </div>
     </transition>
-
   </div>
 </template>
-
 <script>
 export default {
   props: {
