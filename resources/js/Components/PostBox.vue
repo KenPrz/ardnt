@@ -19,11 +19,13 @@ function sharePost(post) {
     <div class="flex flex-col rounded-lg shadow-lg overflow-hidden w-full bg-white mb-5">
         <!-- Post Image -->
         <div class="w-full h-72">
-            <img 
-                class="object-cover w-full h-full rounded-t-lg"
-                :src="post.cover_image"
-                :alt="post.title"
-            />
+            <a :href="route('posts.show',post.id)">
+                <img 
+                    class="object-cover w-full h-full rounded-t-lg"
+                    :src="post.cover_image"
+                    :alt="post.title"
+                />
+            </a>
         </div>
         <!-- Post Content -->
         <div class="p-4">

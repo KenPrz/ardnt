@@ -6,6 +6,7 @@ use App\Http\Requests\PostCreationRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -51,7 +52,16 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = Post::findOrFail($id)
+                ->with('user', 
+                'comments.user', 
+                'likedByUsers',
+                'originalPost', 
+                'shares')->first();
+            dd($post);
+        return Inertia::render('Post/View', [
+
+        ]);
     }
 
     /**

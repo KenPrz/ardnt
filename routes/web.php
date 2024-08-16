@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/follow-user', [FollowUserController::class, 'follow'])->name('user.follow');
     Route::delete('/unfollow-user', [FollowUserController::class, 'unfollow'])->name('user.unfollow');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('posts.show');
 });
 
 //auth routes
