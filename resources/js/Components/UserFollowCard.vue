@@ -1,33 +1,43 @@
-
 <script setup>
-    const props = defineProps({
-        user_id: {
-            type: Number,
-            required: true,
-        },
-        handle: {
-            type: String,
-            required: true,
-        },
-        first_name: {
-            type: String,
-            required: true,
-        },
-        last_name: {
-            type: String,
-            required: true,
-        },
-        avatar: {
-            type: String,
-            required: true,
-        },
-    });
-    
-    const emit = defineEmits(['follow']);
+import { ref } from 'vue';
 
-    function followUser() {
+const props = defineProps({
+    user_id: {
+        type: Number,
+        required: true,
+    },
+    handle: {
+        type: String,
+        required: true,
+    },
+    first_name: {
+        type: String,
+        required: true,
+    },
+    last_name: {
+        type: String,
+        required: true,
+    },
+    avatar: {
+        type: String,
+        required: true,
+    },
+    is_followed: {
+        type: Boolean,
+        default: false,
+    },
+});
+
+const emit = defineEmits(['follow']);
+
+const isFollowed = ref(props.is_followed);
+
+function followUser() {
+    if (!isFollowed.value) {
         emit('follow', props.user_id);
+        isFollowed.value = true;
     }
+}
 </script>
 <template>
     <div class="w-full py-2 px-4 border rounded-lg">
@@ -41,13 +51,14 @@
             </div>
             <button
                 @click="followUser"
-                class="bg-blue-500 hover:bg-blue-600 transition-colors duration-200 text-white px-4 py-2 rounded-full ml-auto">
-                Follow
+                :class="[
+                    'transition-colors duration-200 px-4 py-2 rounded-full ml-auto',
+                    isFollowed ? 'bg-gray-300 text-gray-700' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                ]"
+                :disabled="isFollowed"
+            >
+                {{ isFollowed ? 'Followed' : 'Follow' }}
             </button>
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>

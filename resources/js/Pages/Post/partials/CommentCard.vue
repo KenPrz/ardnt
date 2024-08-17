@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import InputError from '@/Components/InputError.vue';
 const props = defineProps({
     comment: {
         type: Object,
@@ -8,7 +9,7 @@ const props = defineProps({
     }
 });
 const showOptions = ref(false);
-const isEditMode = ref(false);
+const isEditing = ref(false);
 function getRelativeTime(dateString) {
     const now = new Date();
     const commentDate = new Date(dateString);
@@ -24,23 +25,33 @@ function getRelativeTime(dateString) {
     return `${Math.floor(diffInSeconds / 29030400)} years ago`;
 }
 const commentData = useForm({
-    post_id: props.comment.post_id,
+    user_id: props.comment.user.id,
+    comment_id: props.comment.id,
     content: props.comment.content,
 });
 
 function toggleOptions() {
     showOptions.value = !showOptions.value;
-    isEditMode.value = false;
 }
+
+function toggleEditing() {
+    isEditing.value = !isEditing.value;
+    commentData.content = props.comment.content;
+}
+
 function submitEdit() {
-    commentData.put(route('comments.update', props.comment.id), {
+    commentData.put(route('comments.update'), {
         preserveScroll: true,
         onSuccess: () => {
-            isEditMode.value = false;
+            isEditing.value = false;
         },
     });
 }
-
+function closeOptions() {
+    showOptions.value = !showOptions.value;
+    isEditing.value = false;
+    commentData.content = props.comment.content;
+}
 function deleteComment() {
     if (confirm('Are you sure you want to delete this comment?')) {
         commentData.delete(route('comments.destroy', props.comment.id), {
@@ -48,7 +59,6 @@ function deleteComment() {
         });
     }
 }
-
 </script>
 
 <template>
@@ -80,37 +90,53 @@ function deleteComment() {
                 </div>
                 <button @click="toggleOptions" v-show="!showOptions">•••</button>
                 <div v-show="showOptions" class="flex items-center space-x-2">
-                    <button @click="isEditMode = true">
+                    <button @click="toggleEditing">
                         <i class="pi pi-pen-to-square" style="font-size: .9em; color: green;"></i>
                     </button>
                     <button @click="deleteComment">
                         <i class="pi pi-trash" style="font-size: .9em; color: red;"></i>
                     </button>
-                    <button @click="showOptions=false">
+                    <button @click="closeOptions">
                         <i class="pi pi-times-circle" style="font-size: .9em; color: blue;"></i>
                     </button>
                 </div>
             </div>
             <!-- Comment Text -->
-            <p v-show="!isEditMode" class="text-gray-700 mb-2 text-sm">
+            <p v-show="!isEditing" class="text-gray-700 mb-2 text-sm">
                 {{ props.comment.content }}
             </p>
             <!-- Edit Comment -->
              <!-- To Do : Add condition to check if user is the owner of the comment to activate this button -->
-            <div v-show="isEditMode" class="flex w-full space-x-2">
-                <input
+            <div v-show="isEditing"  class="flex flex-col w-full my-2">
+                <textarea
+                    id="textArea"
                     v-model="commentData.content"
-                    type="text"
                     class="w-full border border-gray-300 rounded-lg p-2"
-                />
-                <button
-                    @click="submitEdit"
-                    :disabled="commentData.processing"
-                    class="bg-maroon-600 text-white px-4 py-2 rounded-lg"
-                >
-                    Save
-                </button>
+                ></textarea>
+                <div class="flex justify-end mt-2 space-x-2 me-2">
+                    <button
+                        @click="submitEdit"
+                        :disabled="commentData.processing"
+                        class="text-blue-500 text-xs hover:underline"
+                    >
+                        Save
+                    </button>
+                    <button
+                        @click="closeOptions"
+                        :disabled="commentData.processing"
+                        class="text-blue-500 text-xs hover:underline"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
+            <InputError :message="commentData.errors.content" class="mt-2" />
         </div>
     </div>
 </template>
+<style scoped>
+    #textArea {
+        min-height: 100px;
+        font-size: .9rem;
+    }
+</style>

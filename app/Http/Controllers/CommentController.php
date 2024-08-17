@@ -25,6 +25,11 @@ class CommentController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'comment_id' => 'required|numeric|exists:comments,id',
+            'content' => 'required|string|max:1024',
+        ]);
+        
         $comment = Comment::findOrFail($request->comment_id);
         $comment->content = $request->content;
         $comment->is_edited = true;

@@ -14,11 +14,18 @@ const form = useForm({
     user_id: null,
 });
 
+const followedUsers = ref(new Set());
+
 function followUser(user_id) {
+    if (followedUsers.value.has(user_id)) {
+        return; // Prevent spam clicking :)
+    }
+    
     form.user_id = user_id;
     form.post(route('user.follow'), {
         preserveScroll: true,
         onSuccess: () => {
+            followedUsers.value.add(user_id);
             form.user_id = null;
         },
         onError: () => {
@@ -34,18 +41,16 @@ function followUser(user_id) {
         <div class="mt-4 flex flex-col space-y-2 py-2">
             <UserFollowCard 
                 v-for="follower in suggestedFollowers"
-                :key="follower.id" v-bind="follower" 
+                :key="follower.id" 
+                v-bind="follower" 
                 @follow="followUser" 
                 :user_id="follower.id"
-                :handle = "follower.handle"
-                :first_name = "follower.first_name"
-                :last_name = "follower.last_name"
-                :avatar = "follower.avatar"    
+                :handle="follower.handle"
+                :first_name="follower.first_name"
+                :last_name="follower.last_name"
+                :avatar="follower.avatar"
+                :is_followed="followedUsers.has(follower.id)"
             />
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>
