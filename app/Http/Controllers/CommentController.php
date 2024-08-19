@@ -7,6 +7,11 @@ use App\Http\Requests\DeleteCommentRequest;
 use App\Models\Comment;
 class CommentController extends Controller
 {
+    /**
+     * Store a newly created comment.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
     public function store(Request $request)
     {
 
@@ -14,7 +19,13 @@ class CommentController extends Controller
             'post_id' => 'required|numeric|exists:posts,id',
             'content' => 'required|string|max:1024',
         ]);
-
+        
+        if (!Comment::canUserComment(auth()->id())) {
+            return redirect()->back()->withErrors([
+                'comment' => 'You have reached the maximum number of comments allowed in 5 minutes!!!',
+            ]);
+        }
+        
         Comment::create([
             'user_id' => auth()->id(),
             'post_id' => $request->post_id,

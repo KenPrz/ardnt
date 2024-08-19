@@ -1,7 +1,8 @@
 <script setup>
     import InputError from '@/Components/InputError.vue';
     import { useForm } from '@inertiajs/vue3';
-
+    import { useToast } from 'vue-toastification';
+    const toast = useToast();
     const props = defineProps({
         post_id: {
             type: Number,
@@ -18,6 +19,11 @@
             preserveScroll: true,
             onSuccess: () => {
                 form.reset();
+            },
+            onError: (data) => {
+                console.log(data);
+                
+                toast.error(data.comment);
             },
         });
     }

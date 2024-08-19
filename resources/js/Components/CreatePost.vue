@@ -124,7 +124,7 @@ function submitPost() {
             <InputError :message="form.errors.content" />
         </div>
         <div class="mt-5">
-            <button @click="submitPost" class="w-full p-3 bg-blue-500 text-white rounded-lg">
+            <button @click="submitPost" class="w-full p-3 hover:bg-maroon-600 bg-maroon-500 transition-colors duration:200 text-white rounded-lg">
                 Create Post
             </button>
         </div>
@@ -147,9 +147,9 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"]::before {
     content: 'Choose a file';
     display: inline-block;
-    background: #007bff;
+    background: #a02334;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #a02334;
     border-radius: 0.375rem;
     padding: 0.5rem 1rem;
     text-align: center;
