@@ -22,7 +22,7 @@ class CommentController extends Controller
         
         if (!Comment::canUserComment(auth()->id())) {
             return redirect()->back()->withErrors([
-                'comment' => 'You have reached the maximum number of comments allowed in 5 minutes!!!',
+                'content' => 'You have reached the maximum number of comments allowed in 5 minutes!!!',
             ]);
         }
         

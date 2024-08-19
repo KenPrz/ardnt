@@ -20,11 +20,6 @@
             onSuccess: () => {
                 form.reset();
             },
-            onError: (data) => {
-                console.log(data);
-                
-                toast.error(data.comment);
-            },
         });
     }
 </script>

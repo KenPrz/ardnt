@@ -29,7 +29,7 @@ function followUser(user_id, handle) {
         onSuccess: () => {
             followedUsers.value.add(user_id);
             form.user_id = null;
-            toast.info(`${handle} followed successfully`,{
+            toast.info(`@${handle} followed successfully`,{
                 timeout: 1500,
             });
         },

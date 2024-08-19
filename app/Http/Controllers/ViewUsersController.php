@@ -14,16 +14,35 @@ class ViewUsersController extends Controller
         $posts = $user->posts()
             ->withRelationsAndCounts()
             ->paginate(10);
-
         foreach ($posts as $post) {
             $post->is_liked_by_user = $post->isLikedByUser(auth()->id());
         }
-
         return Inertia::render('Users/ViewUser', [
             'user' => $user,
-            'posts' => $posts,
-            'followers' => $user->followers()->paginate(10),
-            'following' => $user->following()->paginate(10),
+            'posts' => [
+                'count' => $user->posts()->count(),
+                'data' => $posts,
+            ],
+            'followers' => [
+                'count' => $user->followers()->count(),
+                'data' => $user->followers()->paginate(10),
+            ],
+            'following' => [
+                'count' => $user->following()->count(),
+                'data' => $user->following()->paginate(10),
+            ],
         ]);
+    }
+
+    public function getPosts($id) {
+        dd($id);
+    }
+
+    public function followers($id) {
+        dd($id);
+    }
+
+    public function following($id) {
+        dd($id);
     }
 }
