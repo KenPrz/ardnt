@@ -34,7 +34,7 @@ const isFollowed = ref(props.is_followed);
 
 function followUser() {
     if (!isFollowed.value) {
-        emit('follow', props.user_id);
+        emit('follow', props.user_id,props.handle);
         isFollowed.value = true;
     }
 }
@@ -43,7 +43,7 @@ function followUser() {
     <div class="w-full py-2 px-4 border rounded-lg">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <img :src="avatar" alt="avatar" class="w-12 h-12 rounded-full">
+                <img :src="`/storage/avatars/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
                 <div class="ml-2">
                     <h1 class="font-semibold text-md">{{ first_name }} {{ last_name }}</h1>
                     <p class="text-gray-500">@{{ handle }}</p>

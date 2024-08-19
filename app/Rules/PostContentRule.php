@@ -31,6 +31,6 @@ class PostContentRule implements ValidationRule
         // Optionally, check if the input is valid HTML
         if ($plainText === $value) {
             $fail('The :attribute must contain valid HTML content.');
-        }
+        } 
     }
 }

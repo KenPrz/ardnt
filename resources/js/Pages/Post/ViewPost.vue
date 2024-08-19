@@ -35,7 +35,7 @@ function toggleComments() {
         <div class="w-full">
             <img 
                 class="object-cover w-full h-72 rounded-t-lg"
-                :src="post.cover_image"
+                :src="'/storage/images/' + post.cover_image"
                 :alt="post.title"
             />
         </div>

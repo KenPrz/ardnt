@@ -85,7 +85,7 @@ class NewsFeedController extends Controller
     {
         return Post::where('is_public', true)
             ->withRelationsAndCounts()
-            ->latest()
+            ->latest('created_at')
             ->paginate(10);
     }
 

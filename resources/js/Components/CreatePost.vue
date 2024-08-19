@@ -1,12 +1,15 @@
 <script setup>
 import { ref, watch, defineEmits } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { useToast } from "vue-toastification";
 import Editor from '@/Components/Editor.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+const toast = useToast();
 const emit = defineEmits(['close']);
+
 const blogContent = ref('Write something amazing...');
 const props = defineProps({
     themes: {
@@ -52,11 +55,14 @@ function submitPost() {
     form.post(route('posts.store'),
         {
             preserveScroll: true,
-            onSuccess: (data) => {
+            onSuccess: () => {
                 form.reset();
-                console.log('Post created successfully: ', data);
+                toast.success('Post created successfully');
                 emit('close');
-            }
+            },
+            onError: () => {
+                toast.error('Failed to create post');
+            },
         });
 }
 </script>

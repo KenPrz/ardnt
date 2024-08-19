@@ -17,6 +17,20 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $avatars = [
+            'pfp0.jpeg',
+            'pfp1.jpeg',
+            'pfp2.jpeg',
+            'pfp3.jpeg',
+            'pfp4.jpeg',
+            'pfp5.jpeg',
+            'pfp6.jpeg',
+            'pfp7.jpeg',
+            'pfp8.jpeg',
+            'pfp9.jpeg',
+            'pfp10.jpeg',
+            'pfp11.jpeg'
+        ];        
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -24,7 +38,7 @@ class UserFactory extends Factory
             'handle' => fake()->unique()->userName(),
             'quote' => fake()->sentence(),
             'website' => fake()->url(),
-            'avatar' => fake()->imageUrl(),
+            'avatar' => $this->faker->randomElement($avatars),
             'twitter' => fake()->userName(),
             'instagram' => fake()->userName(),
             'facebook' => fake()->userName(),

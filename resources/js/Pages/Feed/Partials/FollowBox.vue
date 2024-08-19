@@ -1,8 +1,10 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import { useToast } from "vue-toastification";
 import { ref } from 'vue';
 import UserFollowCard from '@/Components/UserFollowCard.vue';
 
+const toast = useToast();
 const props = defineProps({
     suggestedFollowers: {
         type: Object,
@@ -16,7 +18,7 @@ const form = useForm({
 
 const followedUsers = ref(new Set());
 
-function followUser(user_id) {
+function followUser(user_id, handle) {
     if (followedUsers.value.has(user_id)) {
         return; // Prevent spam clicking :)
     }
@@ -27,6 +29,9 @@ function followUser(user_id) {
         onSuccess: () => {
             followedUsers.value.add(user_id);
             form.user_id = null;
+            toast.info(`${handle} followed successfully`,{
+                timeout: 1500,
+            });
         },
         onError: () => {
             form.user_id = null;

@@ -43,18 +43,24 @@ class PostSeeder extends Seeder
             // Generate comments based on the visibility
             if ($post->is_public) {
                 // For public posts
-                Comment::factory(rand(1, 10))->create([
-                    'user_id' => $users->random(),
-                    'post_id' => $post->id,
-                ]);
+                $randomUsers = $users->random(rand(1,5));
+
+                foreach ($randomUsers as $user) {
+                    Comment::factory()->create([
+                        'user_id' => $user->id,
+                        'post_id' => $post->id,
+                    ]);
+                }
             } else {
                 // For non-public posts
                 $userFollowers = $post->user->followers;
                 if ($userFollowers->isNotEmpty()) {
-                    Comment::factory(rand(1, 10))->create([
-                        'user_id' => $userFollowers->random(),
-                        'post_id' => $post->id,
-                    ]);
+                    foreach ($userFollowers as $user) {
+                        Comment::factory()->create([
+                            'user_id' => $user->id,
+                            'post_id' => $post->id,
+                        ]);
+                    }
                 }
             }
         });

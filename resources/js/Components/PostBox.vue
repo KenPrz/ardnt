@@ -41,7 +41,7 @@ function closeViewPostModal() {
             <img 
                 @click="viewPost(false)"
                 class="object-cover w-full h-full rounded-t-lg hover:cursor-pointer"
-                :src="post.cover_image"
+                :src="'/storage/images/' + post.cover_image"
                 :alt="post.title"
             />
         </div>

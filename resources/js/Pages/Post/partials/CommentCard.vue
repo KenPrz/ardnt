@@ -1,10 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { useToast } from "vue-toastification";
 import InputError from '@/Components/InputError.vue';
 import Modal from '@/Components/Modal.vue';
 
 import getRelativeTime from '@/custom-js/dateTimeCalc';
+
+const toast = useToast();
 
 const props = defineProps({
     comment: {
@@ -61,6 +64,7 @@ function deleteComment() {
         onSuccess: () => {
             closeDeleteModal();
             closeOptions();
+            toast.success('Comment deleted successfully');
         },
     });
 }
@@ -90,7 +94,7 @@ function deleteComment() {
         <!-- User Avatar -->
         <a :href="route('users.show',props.comment.user.id)">
             <img
-                :src="props.comment.user.avatar"
+                :src="`/storage/avatars/`+props.comment.user.avatar"
                 :alt="`${props.comment.user.first_name} ${props.comment.user.last_name}`"
                 class="w-12 h-12 rounded-full object-cover"
             />

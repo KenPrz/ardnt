@@ -1,36 +1,35 @@
 <template>
-    <div class="flex items-center justify-center space-x-4">
-        <template v-for="link in pagination.links" :key="link.url ?? ''">
-            <template v-if="link.url">
-                <Link
-                    preserve-scroll
-                    :href="link.url"
-                    v-html="link.label"
-                    class="px-4 py-2 rounded-md text-black border-gray-200 border-2 hover:bg-gray-200 transition-colors duration-200"
-                    :class="{ '!bg-main-500 text-white': link.active }"
-                />
-            </template>
-            <template v-else>
-                <span
-                    v-html="link.label"
-                    class="px-4 py-2 rounded-md text-gray-300 border-gray-200 border-2"
-                />
-            </template>
-        </template>
-    </div>    
-</template>
-
-<script setup>
-import { Link } from '@inertiajs/vue3';
-    const pagination = defineProps({
-        links: Array,
-        first_page_url: String,
-        from: Number,
-        last_page: Number,
-        last_page_url: String,
-    })
-</script>
-
-<style scoped>
-
-</style>
+    <nav class="flex items-center justify-center space-x-2 mx-5" aria-label="Pagination">
+      <template v-for="link in pagination.links" :key="link.url ?? ''">
+        <Link
+          v-if="link.url"
+          :href="link.url"
+          v-html="link.label"
+          class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+          :class="[
+            link.active
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          ]"
+          preserve-scroll
+        />
+        <span
+          v-else
+          v-html="link.label"
+          class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md"
+        />
+      </template>
+    </nav>
+  </template>
+  
+  <script setup>
+  import { Link } from '@inertiajs/vue3';
+  
+  const pagination = defineProps({
+    links: Array,
+    first_page_url: String,
+    from: Number,
+    last_page: Number,
+    last_page_url: String,
+  })
+  </script>
