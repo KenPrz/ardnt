@@ -7,7 +7,7 @@ import CommentCreate from './CommentCreate.vue';
             required: true,
         },
         comments: {
-            type: Object,
+            type: Array,
             required: true,
         }
     });
@@ -18,11 +18,14 @@ import CommentCreate from './CommentCreate.vue';
             <h3 class="text-lg font-semibold text-gray-800">Comments</h3>
         </div>
         <div class="flex flex-col space-y-3 max-h-48 overflow-y-auto">
-            <p v-show="props.comments==0" class="text-gray-500 text-sm">No comments yet</p>
-            <CommentCard v-show="props.comments!=0" v-for="comment in props.comments" 
-                :key="comment.id"
-                :comment="comment" 
-            />
+            <p v-if="props.comments.length === 0" class="text-gray-500 text-sm">No comments yet</p>
+            <template v-else>
+                <CommentCard 
+                    v-for="comment in props.comments" 
+                    :key="comment.id"
+                    :comment="comment" 
+                />
+            </template>
         </div>
         <div class="flex w-full">
             <CommentCreate 

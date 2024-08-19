@@ -4,6 +4,8 @@ import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import Modal from '@/Components/Modal.vue';
 
+import getRelativeTime from '@/custom-js/dateTimeCalc';
+
 const props = defineProps({
     comment: {
         type: Object,
@@ -14,21 +16,6 @@ const props = defineProps({
 const showOptions = ref(false);
 const isEditing = ref(false);
 const showDeleteModal = ref(false);
-
-function getRelativeTime(dateString) {
-    const now = new Date();
-    const commentDate = new Date(dateString);
-    const diffInSeconds = Math.floor((now - commentDate) / 1000);
-    
-    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-    if (diffInSeconds < 2419200) return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
-    if (diffInSeconds < 29030400) return `${Math.floor(diffInSeconds / 2419200)} months ago`;
-
-    return `${Math.floor(diffInSeconds / 29030400)} years ago`;
-}
 
 const commentData = useForm({
     user_id: props.comment.user.id,
@@ -125,8 +112,8 @@ function deleteComment() {
                         <span v-if="props.comment.is_edited" class="text-gray-400">(Edited)</span>
                     </div>
                 </div>
-                <button @click="toggleOptions" v-show="!showOptions">•••</button>
-                <div v-show="showOptions" class="flex items-center space-x-2">
+                <button @click="toggleOptions" v-if="!showOptions && comment.user_id === $page.props.auth.user.id">•••</button>
+                <div v-if="showOptions" class="flex items-center space-x-2">
                     <button @click="toggleEditing">
                         <i class="pi pi-pen-to-square" style="font-size: .9em; color: green;"></i>
                     </button>

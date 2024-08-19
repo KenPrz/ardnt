@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\DeleteCommentRequest;
 use App\Models\Comment;
 class CommentController extends Controller
 {
@@ -36,9 +37,13 @@ class CommentController extends Controller
         $comment->save();
     }
 
-    public function destroy(Request $request)
+    public function destroy(DeleteCommentRequest $request)
     {
         $comment = Comment::findOrFail($request->comment_id);
+
+        if ($comment->user_id !== auth()->id()) {
+            abort(403);
+        }
         $comment->delete();
     }
 

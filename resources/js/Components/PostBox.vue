@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import Modal from '@/Components/Modal.vue';
 import ViewPost from '@/Pages/Post/ViewPost.vue';
+import getRelativeTime from '@/custom-js/dateTimeCalc';
 
 const emit = defineEmits(['sharePost']);
 
@@ -56,7 +57,7 @@ function closeViewPostModal() {
                     <span>@{{ post.user.handle }}</span>
                 </a>
                 <span class="mx-2">•</span>
-                <span>{{ new Date(post.created_at).toLocaleDateString() }}</span>
+                <span>{{ getRelativeTime(post.created_at) }}</span>
                 <span class="mx-2">•</span>
                 <i v-if="post.is_public" class="pi pi-globe" style="font-size: .8em;"></i>
                 <i v-else class="pi pi-lock" style="font-size: .8em;"></i>
