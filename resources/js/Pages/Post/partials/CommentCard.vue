@@ -2,14 +2,19 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
+import Modal from '@/Components/Modal.vue';
+
 const props = defineProps({
     comment: {
         type: Object,
         required: true,
     }
 });
+
 const showOptions = ref(false);
 const isEditing = ref(false);
+const showDeleteModal = ref(false);
+
 function getRelativeTime(dateString) {
     const now = new Date();
     const commentDate = new Date(dateString);
@@ -24,6 +29,7 @@ function getRelativeTime(dateString) {
 
     return `${Math.floor(diffInSeconds / 29030400)} years ago`;
 }
+
 const commentData = useForm({
     user_id: props.comment.user.id,
     comment_id: props.comment.id,
@@ -47,24 +53,55 @@ function submitEdit() {
         },
     });
 }
+
 function closeOptions() {
-    showOptions.value = !showOptions.value;
+    showOptions.value = false;
     isEditing.value = false;
     commentData.content = props.comment.content;
 }
+
+function openDeleteModal() {
+    showDeleteModal.value = true;
+}
+
+function closeDeleteModal() {
+    showDeleteModal.value = false;
+}
+
 function deleteComment() {
-    if (confirm('Are you sure you want to delete this comment?')) {
-        commentData.delete(route('comments.destroy', props.comment.id), {
-            preserveScroll: true,
-        });
-    }
+    commentData.delete(route('comments.destroy', props.comment.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeDeleteModal();
+            closeOptions();
+        },
+    });
 }
 </script>
 
 <template>
+    <Modal :show="showDeleteModal" @close="closeDeleteModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900">
+                Delete Comment
+            </h2>
+            <p class="mt-1 text-sm text-gray-600">
+                Are you sure you want to delete this comment?
+            </p>
+            <div class="mt-6 flex justify-end">
+                <button @click="closeDeleteModal" type="button" class="px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                    Cancel
+                </button>
+                <button @click="deleteComment" type="button" class="ml-3 px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
+
     <div class="flex items-start space-x-2 p-3 border rounded-lg shadow-sm bg-white me-2">
         <!-- User Avatar -->
-         <a :href="route('users.show',props.comment.user.id)">
+        <a :href="route('users.show',props.comment.user.id)">
             <img
                 :src="props.comment.user.avatar"
                 :alt="`${props.comment.user.first_name} ${props.comment.user.last_name}`"
@@ -93,7 +130,7 @@ function deleteComment() {
                     <button @click="toggleEditing">
                         <i class="pi pi-pen-to-square" style="font-size: .9em; color: green;"></i>
                     </button>
-                    <button @click="deleteComment">
+                    <button @click="openDeleteModal">
                         <i class="pi pi-trash" style="font-size: .9em; color: red;"></i>
                     </button>
                     <button @click="closeOptions">
@@ -106,7 +143,6 @@ function deleteComment() {
                 {{ props.comment.content }}
             </p>
             <!-- Edit Comment -->
-             <!-- To Do : Add condition to check if user is the owner of the comment to activate this button -->
             <div v-show="isEditing"  class="flex flex-col w-full my-2">
                 <textarea
                     id="textArea"
@@ -130,10 +166,12 @@ function deleteComment() {
                     </button>
                 </div>
             </div>
+            <p v-if="commentData.recentlySuccessful" class="text-sm text-green-600">Saved.</p>
             <InputError :message="commentData.errors.content" class="mt-2" />
         </div>
     </div>
 </template>
+
 <style scoped>
     #textArea {
         min-height: 100px;
