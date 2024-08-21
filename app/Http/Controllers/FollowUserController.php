@@ -9,10 +9,12 @@ class FollowUserController extends Controller
 {
     public function follow(Request $request)
     {
-        $user = auth()->user();
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
         $follower = UserFollower::create([
-            'user_id' => $request->user_id,
-            'follower_id' => $user->id,
+            'user_id' => auth()->user()->id,
+            'follower_id' => $request->user_id,
         ]);
         if ($follower) {
             return back()->with('success', 'User followed successfully');
@@ -23,8 +25,17 @@ class FollowUserController extends Controller
 
     public function unfollow(Request $request)
     {
-        // $user = auth()->user();
-        // $user->following()->detach($request->user_id);
-        // return response()->json(['message' => 'User unfollowed successfully']);
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+        $follower = UserFollower::where('user_id', auth()->user()->id)
+            ->where('follower_id', $request->user_id)
+            ->first();
+        if ($follower) {
+            $follower->delete();
+            return back()->with('success', 'User unfollowed successfully');
+        } else {
+            throw new \Exception('Failed to unfollow user');
+        }
     }
 }

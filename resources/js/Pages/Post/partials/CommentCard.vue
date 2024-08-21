@@ -40,6 +40,7 @@ function submitEdit() {
         preserveScroll: true,
         onSuccess: () => {
             isEditing.value = false;
+            toggleOptions();
         },
     });
 }
@@ -130,11 +131,11 @@ function deleteComment() {
                 </div>
             </div>
             <!-- Comment Text -->
-            <p v-show="!isEditing" class="text-gray-700 mb-2 text-sm">
+            <p v-if="!isEditing" class="text-gray-700 mb-2 text-sm">
                 {{ props.comment.content }}
             </p>
             <!-- Edit Comment -->
-            <div v-show="isEditing"  class="flex flex-col w-full my-2">
+            <div v-if="isEditing"  class="flex flex-col w-full my-2">
                 <textarea
                     id="textArea"
                     v-model="commentData.content"

@@ -121,18 +121,6 @@ class Post extends Model
             'originalPost',
             'shares',
         ])
-            ->withCount(['comments', 'likedByUsers']);  // Get comment and like counts
+        ->withCount(['comments', 'likedByUsers']);
     }
 }
-
-        // return $query->with([
-        //     'user',
-        //     'comments' => function ($query) {
-        //         $query->latest('created_at')->paginate(20);
-        //     },
-        //     'comments.user',
-        //     'likedByUsers',
-        //     'originalPost',
-        //     'shares',
-        // ])
-        // ->withCount(['comments', 'likedByUsers']);

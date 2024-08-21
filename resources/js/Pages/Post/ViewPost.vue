@@ -67,7 +67,7 @@ function toggleComments() {
                     <LikeButton
                         :likes_count="post.liked_by_users_count"
                         :post_id="post.id"
-                        :is_liked_by_user="post.is_liked_by_user" 
+                        :is_liked_by_user="post.is_liked_by_user"
                     />
                 </div>
                 <div class="flex items-center justify-center space-x-2 me-2">

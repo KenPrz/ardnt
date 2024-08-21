@@ -46,7 +46,6 @@ class NewsFeedController extends Controller
         foreach ($posts as $post) {
             $post->is_liked_by_user = $post->isLikedByUser($user->id);
         }
-
         return Inertia::render('Feed/NewsFeed', [
             'posts' => $posts,
             'followRecommendations' => $this->getRecommendedFollowers($user->id),
@@ -66,15 +65,18 @@ class NewsFeedController extends Controller
     {
         $follow_recommendations = User::select('id', 'first_name', 'last_name', 'avatar', 'handle')
             ->whereNotIn('id', function ($query) use ($user_id) {
-                $query->select('user_id')
+                $query->select('follower_id')
                     ->from('user_follower')
-                    ->where('follower_id', $user_id);
-            })->where('id', '!=', $user_id)
+                    ->where('user_id', $user_id);
+            })
+            ->where('id', '!=', $user_id)
             ->limit(5)
             ->get();
-
+    
         return $follow_recommendations;
     }
+    
+    
 
     /**
      * Retrieve public posts with related data.

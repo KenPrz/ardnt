@@ -41,8 +41,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::get('/users/{user}', [ViewUsersController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/posts', [ViewUsersController::class, 'getPosts'])->name('users.posts');
-    Route::get('/users/{user}/followers', [ViewUsersController::class, 'followers'])->name('users.followers');
-    Route::get('/users/{user}/following', [ViewUsersController::class, 'following'])->name('users.following');
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comment', [CommentController::class,'destroy'])->name('comments.destroy');

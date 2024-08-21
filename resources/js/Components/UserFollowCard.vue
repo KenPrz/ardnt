@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import FollowButton from '@/Components/FollowButton.vue';
 
 const props = defineProps({
     user_id: {
@@ -27,38 +27,26 @@ const props = defineProps({
         default: false,
     },
 });
-
-const emit = defineEmits(['follow']);
-
-const isFollowed = ref(props.is_followed);
-
-function followUser() {
-    if (!isFollowed.value) {
-        emit('follow', props.user_id,props.handle);
-        isFollowed.value = true;
-    }
-}
 </script>
 <template>
-    <div class="w-full py-2 px-4 border rounded-lg">
+    <div class="w-full py-2 px-4 border rounded-lg bg-white">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <img :src="`/storage/avatars/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
+                <a :href="route('users.show',user_id)">
+                    <img :src="`/storage/avatars/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
+                </a>
                 <div class="ml-2">
-                    <h1 class="font-semibold text-md">{{ first_name }} {{ last_name }}</h1>
-                    <p class="text-gray-500">@{{ handle }}</p>
+                    <a :href="route('users.show',user_id)">
+                        <h1 class="font-semibold text-md">{{ first_name }} {{ last_name }}</h1>
+                    </a>
+                    <a :href="route('users.show',user_id)">
+                        <p class="text-gray-500">@{{ handle }}</p>
+                    </a>
                 </div>
             </div>
-            <button
-                @click="followUser"
-                :class="[
-                    'transition-colors duration-200 px-4 py-2 rounded-full ml-auto',
-                    isFollowed ? 'bg-gray-300 text-gray-700' : 'bg-blue-500 hover:bg-blue-600 text-white'
-                ]"
-                :disabled="isFollowed"
-            >
-                {{ isFollowed ? 'Followed' : 'Follow' }}
-            </button>
+            <FollowButton 
+                :user_id="user_id"
+                :is_followed="is_followed" />
         </div>
     </div>
 </template>
