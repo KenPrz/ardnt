@@ -10,7 +10,6 @@ const emit = defineEmits(['sharePost']);
 function sharePost(post) {
     emit('sharePost', post);
 }
-
 const props = defineProps({
     post: {
         type: Object,
@@ -53,7 +52,7 @@ function closeViewPostModal() {
             </h2>
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
-                <a :href="route('users.show', post.user.id)" class="hover:underline">
+                <a :href="route('users.show', post.user.handle)" class="hover:underline">
                     <span>@{{ post.user.handle }}</span>
                 </a>
                 <span class="mx-2">•</span>

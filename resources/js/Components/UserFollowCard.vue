@@ -32,14 +32,14 @@ const props = defineProps({
     <div class="w-full py-2 px-4 border rounded-lg bg-white">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <a :href="route('users.show',user_id)">
+                <a :href="route('users.show',handle)">
                     <img :src="`/storage/avatars/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
                 </a>
                 <div class="ml-2">
-                    <a :href="route('users.show',user_id)">
+                    <a :href="route('users.show',handle)">
                         <h1 class="font-semibold text-md">{{ first_name }} {{ last_name }}</h1>
                     </a>
-                    <a :href="route('users.show',user_id)">
+                    <a :href="route('users.show',handle)">
                         <p class="text-gray-500">@{{ handle }}</p>
                     </a>
                 </div>

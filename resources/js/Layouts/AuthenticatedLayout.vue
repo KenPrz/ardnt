@@ -107,33 +107,33 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                    class="sm:hidden"
-                >
-                    <div class="pt-2 pb-3 space-y-1">
+                    <div
+                        :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+                        class="sm:hidden"
+                    >
+                        <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Feed
                         </ResponsiveNavLink>
-                    </div>
+                        </div>
 
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
+                        <!-- Responsive Settings Options -->
+                        <div class="pt-4 pb-1 border-t border-maroon-400">
                         <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">
-                                {{ $page.props.auth.user.name }}
+                            <div class="font-medium text-base text-white">
+                            {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                            <div class="font-medium text-sm text-gray-200">{{ $page.props.auth.user.email }}</div>
                         </div>
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                            Log Out
                             </ResponsiveNavLink>
                         </div>
+                        </div>
                     </div>
-                </div>
             </nav>
 
             <!-- Page Heading -->

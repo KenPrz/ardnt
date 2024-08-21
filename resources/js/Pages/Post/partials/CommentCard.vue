@@ -93,7 +93,7 @@ function deleteComment() {
 
     <div class="flex items-start space-x-2 p-3 border rounded-lg shadow-sm bg-white me-2">
         <!-- User Avatar -->
-        <a :href="route('users.show',props.comment.user.id)">
+        <a :href="route('users.show',props.comment.user.handle)">
             <img
                 :src="`/storage/avatars/`+props.comment.user.avatar"
                 :alt="`${props.comment.user.first_name} ${props.comment.user.last_name}`"
@@ -106,7 +106,7 @@ function deleteComment() {
             <div class="w-full flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <div class="flex items-center">
-                        <a class="hover:underline" :href="route('users.show', props.comment.user.id)">
+                        <a class="hover:underline" :href="route('users.show', props.comment.user.handle)">
                             <span class="text-gray-500">@{{ props.comment.user.handle }}</span>
                         </a>
                     </div>

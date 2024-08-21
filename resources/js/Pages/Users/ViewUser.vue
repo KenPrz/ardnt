@@ -8,7 +8,7 @@ import Tabbar from '@/Components/Tabbar.vue';
 import UserPosts from './partials/UserPosts.vue';
 import FollowerList from './partials/FollowersList.vue';
 import FollowingList from './partials/FollowingList.vue';
-import FollowButton from '@/Components/FollowButton.vue';  
+import FollowButton from '@/Components/FollowButton.vue';
 import Modal from '@/Components/Modal.vue';
 
 // Props
@@ -67,13 +67,10 @@ const closeModal = () => {
 </script>
 
 <template>
+
   <Head title="Dashboard" />
   <AuthenticatedLayout>
-    <Modal
-      v-if="user.id == $page.props.auth.user.id"
-      :show="isEditing"
-      @close="closeModal"
-    >
+    <Modal v-if="user.id == $page.props.auth.user.id" :show="isEditing" @close="closeModal">
       <!-- Edit Profile -->
       <Edit />
     </Modal>
@@ -82,11 +79,8 @@ const closeModal = () => {
         <section class="flex flex-col items-center md:flex-row my-3 py-5 space-x-6">
           <div class="flex flex-col items-center space-y-3 w-1/3">
             <div class="h-2/3 w-auto">
-              <img
-                class="object-cover w-full h-full rounded-full"
-                :src="'/storage/avatars/' + user.avatar"
-                :alt="user.first_name"
-              />
+              <img class="object-cover w-full h-full rounded-full" :src="'/storage/avatars/' + user.avatar"
+                :alt="user.first_name" />
             </div>
             <div class="flex" v-if="user.socials.website">
               <a class="flex items-center space-x-2 mb-2 md:mb-0" :href="user.socials.website" target="_blank">
@@ -99,10 +93,10 @@ const closeModal = () => {
             <h1 class="text-center md:text-start text-4xl md:text-6xl font-customSerif text-maroon-500">
               {{ user.first_name + ' ' + user.last_name }}
             </h1>
-            <a :href="route('users.show', user.id)">
+            <a :href="route('users.show', user.handle)">
               <h2 class="text-center md:text-start text-md text-gray-500">@{{ user.handle }}</h2>
             </a>
-            <div class="min-h-[3rem] flex items-center">
+            <div class="min-h-[1rem] md:min-h-[3rem] flex items-center justify-center md:justify-start">
               <p v-if="hasQuote" class="text-center md:text-start text-md text-sm md:text-lg text-gray-700 italic">
                 "{{ user.quote }}"
                 <span v-if="user.id == $page.props.auth.user.id">
@@ -112,7 +106,8 @@ const closeModal = () => {
                 </span>
               </p>
             </div>
-            <div class="flex flex-col md:flex-row w-full md:w-4/5 justify-center md:justify-between mt-3 space-y-2 space-x-2  md:space-y-0">
+            <div
+              class="flex flex-col md:flex-row w-full md:w-4/5 justify-center md:justify-between mt-3 space-y-2 space-x-2  md:space-y-0">
               <div class="flex justify-center md:justify-start space-x-2">
                 <div>
                   <div class="flex space-x-1">
@@ -137,13 +132,16 @@ const closeModal = () => {
                 <a :href="'https://twitter.com/' + user.socials.twitter" target="_blank" v-if="user.socials.twitter">
                   <i class="pi pi-twitter" style="font-size: 1.1em; color:black;"></i>
                 </a>
-                <a :href="'https://www.instagram.com/' + user.socials.instagram" target="_blank" v-if="user.socials.instagram">
+                <a :href="'https://www.instagram.com/' + user.socials.instagram" target="_blank"
+                  v-if="user.socials.instagram">
                   <i class="pi pi-instagram" style="font-size: 1.1em; color:black;"></i>
                 </a>
-                <a :href="'https://www.facebook.com/' + user.socials.facebook" target="_blank" v-if="user.socials.facebook">
+                <a :href="'https://www.facebook.com/' + user.socials.facebook" target="_blank"
+                  v-if="user.socials.facebook">
                   <i class="pi pi-facebook" style="font-size: 1.1em; color:black;"></i>
                 </a>
-                <a :href="'https://www.linkedin.com/in/' + user.socials.linkedin" target="_blank" v-if="user.socials.linkedin">
+                <a :href="'https://www.linkedin.com/in/' + user.socials.linkedin" target="_blank"
+                  v-if="user.socials.linkedin">
                   <i class="pi pi-linkedin" style="font-size: 1.1em; color:black;"></i>
                 </a>
                 <a :href="'https://medium.com/@' + user.socials.medium" target="_blank" v-if="user.socials.medium">
@@ -151,16 +149,10 @@ const closeModal = () => {
                 </a>
               </div>
             </div>
-            <div class="w-full flex-col mt-3">
-              <FollowButton 
-                v-if="user.id != $page.props.auth.user.id"
-                :is_followed="user.is_followed_by_me" 
-                :user_id="user.id"
-                :is_styled="false"
-              />
-              <button v-else
-                @click="openModal"
-                @close="closeModal"
+            <div class="w-full flex justify-center md:justify-start mt-3">
+              <FollowButton v-if="user.id != $page.props.auth.user.id" :is_followed="user.is_followed_by_me"
+                :user_id="user.id" :is_styled="false" />
+              <button v-else @click="openModal" @close="closeModal"
                 class="flex items-center space-x-2 text-maroon-500 font-semibold">
                 <i class="pi pi-cog" style="font-size: 1em;"></i>
                 <span>Edit Profile</span>
@@ -172,11 +164,22 @@ const closeModal = () => {
           <Tabbar :tabs="tabs">
             <template v-slot:tab1>
               <!-- User Posts Section -->
-              <section class="flex flex-col justify-center mx-10 md:mx-20">
+              <section
+                v-if="posts.data.data.length === 0"
+                class="flex flex-col justify-center mx-10 md:mx-20">
+                <div class="flex flex-col items-center space-y-2">
+                  <h1 class="text-2xl font-semibold text-maroon-500">No posts yet</h1>
+                  <p class="text-maroon-400">When you create posts, they will appear here.</p>
+                </div>
+              </section>
+              <section
+                v-if="posts.data.data.length > 0"  
+                class="flex flex-col justify-center mx-10 md:mx-20">
                 <UserPosts :posts="posts.data.data" />
                 <div class="px-4">
                   <Pagination :first_page_url="posts.data.first_page_url" :from="posts.data.from"
-                    :last_page="posts.data.last_page" :last_page_url="posts.data.last_page_url" :links="posts.data.links" />
+                    :last_page="posts.data.last_page" :last_page_url="posts.data.last_page_url"
+                    :links="posts.data.links" />
                 </div>
               </section>
             </template>

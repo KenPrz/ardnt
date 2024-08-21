@@ -17,7 +17,7 @@ class ViewUsersController extends Controller
      */
     public function show($identifier)
     {
-        // Determine if the identifier is an ID or a handle
+        // Determine if the identifier is an ID or a handle 
         $user = is_numeric($identifier)
             ? User::with('followers', 'following')->findOrFail($identifier)
             : User::with('followers', 'following')->where('handle', $identifier)->firstOrFail();
@@ -46,7 +46,9 @@ class ViewUsersController extends Controller
 
         return Inertia::render('Users/ViewUser', [
             'user' => $this->restructSocials($user),
-            'mustVerifyEmail' => $user->id == auth()->user()->id ? auth()->user() instanceof MustVerifyEmail : null,
+            'mustVerifyEmail' => $user->id == auth()->user()->id 
+                ? auth()->user() instanceof MustVerifyEmail 
+                : null,
             'posts' => [
                 'count' => $posts->total(),
                 'data' => $posts,
