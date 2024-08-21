@@ -15,12 +15,10 @@ class ViewUsersController extends Controller
      * @param int $id The ID of the user.
      * @return \Inertia\Response The rendered view of the user's profile.
      */
-    public function show($identifier)
+    public function show($handle)
     {
         // Determine if the identifier is an ID or a handle 
-        $user = is_numeric($identifier)
-            ? User::with('followers', 'following')->findOrFail($identifier)
-            : User::with('followers', 'following')->where('handle', $identifier)->firstOrFail();
+        $user = User::with('followers', 'following')->where('handle', $handle)->firstOrFail();
 
         $user->is_followed_by_me = $user->isFollowedByMe();
 

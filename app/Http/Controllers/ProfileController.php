@@ -18,7 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): RedirectResponse
     {
-        return redirect()->route('users.show', ['user' => $request->user()->id]);
+        return redirect()->route('users.show', ['user' => $request->user()->handle]);
     }
 
     /**

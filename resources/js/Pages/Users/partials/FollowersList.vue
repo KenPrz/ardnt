@@ -35,7 +35,7 @@ const toast = useToast();
 <template>
 <div class="md:mx-32 mt-5">
         <div class="flex flex-col -space-y-1 ">
-            <span class="text-center text-md font-semibold">{{ followers.data.length === 0 ? 'No followers yet' : '' }}</span>
+            <span class="text-center text-md font-semibold text-maroon-500">{{ followers.data.length === 0 ? 'No followers yet :(' : '' }}</span>
             <div class="py-2" v-for="follower in followers.data" :key="follower.id">
                 <UserFollowCard
                     @follow="followUser" 
