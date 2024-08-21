@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
+use App\Rules\UserHandleRule;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -30,9 +31,9 @@ class RegisterUserRequest extends FormRequest
             'handle' => [
                 'required',
                 'string',
-                'max:50',
+                'max:30',
                 'min:5',
-                'regex:/^[\w\-.]+$/', // Allows letters, numbers, dash, and period
+                new UserHandleRule, // Allows letters, numbers, dash, and period
                 'unique:users,handle', // Ensure 'handle' is unique in the 'users' table
             ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -44,8 +45,7 @@ class RegisterUserRequest extends FormRequest
         return [
             'handle.required' => 'The handle field is required.',
             'handle.string' => 'The handle must be a string.',
-            'handle.max' => 'The handle may not be greater than 50 characters.',
-            'handle.regex' => 'The handle may only contain letters, numbers, dashes, and periods. (- .)',
+            'handle.max' => 'The handle may not be greater than 30 characters.',
             'handle.unique' => 'The handle has already been taken.',
         ];
     }

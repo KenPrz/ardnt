@@ -4,7 +4,9 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { useToast } from 'vue-toastification';
 
+const toast = useToast();
 defineProps({
     mustVerifyEmail: {
         type: Boolean,
@@ -20,6 +22,13 @@ const form = useForm({
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
+    handle: user.handle,
+    website: user.website,
+    twitter: user.twitter,
+    instagram: user.instagram,
+    facebook: user.facebook,
+    linkedin: user.linkedin,
+    medium: user.medium,
 });
 </script>
 
@@ -27,22 +36,20 @@ const form = useForm({
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
-
             <p class="mt-1 text-sm text-gray-600">
                 Update your account's profile information and email address.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'),{
+        <form @submit.prevent="form.patch(route('profile.update'), {
             preserveScroll: true,
-            onSuccess: (data) => {
-                console.log(data);
+            onSuccess: () => {
+                toast.success('Profile updated successfully.');
             },
         })" class="mt-6 space-y-6">
             <div class="w-full flex space-x-2">
                 <div class="w-1/2">
                     <InputLabel for="first_name" value="First Name" />
-
                     <TextInput
                         id="first_name"
                         type="text"
@@ -56,7 +63,6 @@ const form = useForm({
                 </div>
                 <div class="w-1/2">
                     <InputLabel for="last_name" value="Last Name" />
-
                     <TextInput
                         id="last_name"
                         type="text"
@@ -65,13 +71,12 @@ const form = useForm({
                         required
                         autocomplete="family-name"
                     />
-
                     <InputError class="mt-2" :message="form.errors.last_name" />
                 </div>
             </div>
+
             <div>
                 <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
@@ -80,8 +85,18 @@ const form = useForm({
                     required
                     autocomplete="username"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div>
+                <InputLabel for="handle" value="Handle" />
+                <TextInput
+                    id="handle"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.handle"
+                />
+                <InputError class="mt-2" :message="form.errors.handle" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

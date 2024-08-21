@@ -5,14 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Post;
 use Inertia\Inertia;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ViewUsersController extends Controller
 {
-    public function show($id)
+    /**
+     * Show the user's profile with followers, following, and posts.
+     *
+     * @param int $id The ID of the user.
+     * @return \Inertia\Response The rendered view of the user's profile.
+     */
+    public function show($identifier)
     {
-        // Retrieve the user with followers and following relationships
-        $user = User::with('followers', 'following')->findOrFail($id);
+        // Determine if the identifier is an ID or a handle
+        $user = is_numeric($identifier)
+            ? User::with('followers', 'following')->findOrFail($identifier)
+            : User::with('followers', 'following')->where('handle', $identifier)->firstOrFail();
+
         $user->is_followed_by_me = $user->isFollowedByMe();
+
         // Attach the 'is_followed_by_me' attribute to followers
         $followers = $user->followers->map(function ($follower) {
             return $follower->toArray() + ['is_followed_by_me' => $follower->isFollowedByMe()];
@@ -22,6 +33,7 @@ class ViewUsersController extends Controller
         $following = $user->following->map(function ($followingUser) {
             return $followingUser->toArray() + ['is_followed_by_me' => $followingUser->isFollowedByMe()];
         });
+
         // Fetch posts of the user with relations and counts
         $posts = Post::where('user_id', $user->id)
                 ->withRelationsAndCounts()
@@ -31,8 +43,10 @@ class ViewUsersController extends Controller
         foreach ($posts as $post) {
             $post->is_liked_by_user = $post->isLikedByUser(auth()->id());
         }
+
         return Inertia::render('Users/ViewUser', [
             'user' => $this->restructSocials($user),
+            'mustVerifyEmail' => $user->id == auth()->user()->id ? auth()->user() instanceof MustVerifyEmail : null,
             'posts' => [
                 'count' => $posts->total(),
                 'data' => $posts,

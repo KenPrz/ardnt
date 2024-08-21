@@ -26,7 +26,7 @@ class PostCreationRequest extends FormRequest
             'title' => 'required|string|max:64|min:5',
             'content' => ['required', 'string', 'max:5000', 'min:5', new PostContentRule],
             'theme' => 'required|numeric|exists:themes,id',
-            'cover_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cover_image' => 'image|mimes:jpeg,png,jpg|max:2048',
             'is_public' => 'required|boolean',
             'is_shared' => 'required|boolean',
             'shared_post_id' => ['nullable', 'numeric', 'exists:posts,id'],
