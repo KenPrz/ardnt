@@ -36,6 +36,21 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile updated.');
     }
 
+    public function avatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+
+        $user->update([
+            'avatar' => $request->file('avatar')->store('avatars', 'public'),
+        ]);
+
+        return back()->with('success', 'Avatar updated.');
+    }
+
     /**
      * Update the user's social media links.
      */

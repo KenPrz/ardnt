@@ -33,7 +33,7 @@ const props = defineProps({
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <a :href="route('users.show',handle)">
-                    <img :src="`/storage/avatars/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
+                    <img :src="`/storage/`+avatar" alt="avatar" class="w-12 h-12 rounded-full">
                 </a>
                 <div class="ml-2">
                     <a :href="route('users.show',handle)">

@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
+import ImageUpload from '@/Components/ImageUpload.vue';
 import Edit from '@/Pages/Profile/Edit.vue';
 import Tabbar from '@/Components/Tabbar.vue';
 import UserPosts from './partials/UserPosts.vue';
@@ -79,7 +80,13 @@ const closeModal = () => {
         <section class="flex flex-col items-center md:flex-row my-3 py-5 space-x-6">
           <div class="flex flex-col items-center space-y-3 w-1/3">
             <div class="h-2/3 w-auto">
-              <img class="object-cover w-full h-full rounded-full" :src="'/storage/avatars/' + user.avatar"
+              <ImageUpload
+                v-if="user.id == $page.props.auth.user.id"
+                :current-avatar="user.avatar"
+              />
+              <img 
+                v-else
+                class="object-cover w-full h-full rounded-full" :src="'/storage/' + user.avatar"
                 :alt="user.first_name" />
             </div>
             <div class="flex" v-if="user.socials.website">

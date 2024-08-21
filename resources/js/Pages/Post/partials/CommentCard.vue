@@ -95,7 +95,7 @@ function deleteComment() {
         <!-- User Avatar -->
         <a :href="route('users.show',props.comment.user.handle)">
             <img
-                :src="`/storage/avatars/`+props.comment.user.avatar"
+                :src="`/storage/`+props.comment.user.avatar"
                 :alt="`${props.comment.user.first_name} ${props.comment.user.last_name}`"
                 class="w-12 h-12 rounded-full object-cover"
             />
