@@ -43,7 +43,7 @@ class PostSeeder extends Seeder
             // Generate comments based on the visibility
             if ($post->is_public) {
                 // For public posts
-                $randomUsers = $users->random(rand(1,5));
+                $randomUsers = $users->random(rand(1, 5));
 
                 foreach ($randomUsers as $user) {
                     Comment::factory()->create([

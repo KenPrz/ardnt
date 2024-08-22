@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Post;
-use Inertia\Inertia;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Inertia\Inertia;
 
 class ViewUsersController extends Controller
 {
     /**
      * Show the user's profile with followers, following, and posts.
      *
-     * @param int $id The ID of the user.
+     * @param  int  $id  The ID of the user.
      * @return \Inertia\Response The rendered view of the user's profile.
      */
     public function show($handle)
     {
-        // Determine if the identifier is an ID or a handle 
+        // Determine if the identifier is an ID or a handle
         $user = User::with('followers', 'following')->where('handle', $handle)->firstOrFail();
 
         $user->is_followed_by_me = $user->isFollowedByMe();
@@ -34,18 +34,13 @@ class ViewUsersController extends Controller
 
         // Fetch posts of the user with relations and counts
         $posts = Post::where('user_id', $user->id)
-                ->withRelationsAndCounts()
-                ->paginate(10);
-
-        // Check if each post is liked by the authenticated user
-        foreach ($posts as $post) {
-            $post->is_liked_by_user = $post->isLikedByUser(auth()->id());
-        }
+            ->withRelationsAndCounts()
+            ->paginate(10);
 
         return Inertia::render('Users/ViewUser', [
             'user' => $this->restructSocials($user),
-            'mustVerifyEmail' => $user->id == auth()->user()->id 
-                ? auth()->user() instanceof MustVerifyEmail 
+            'mustVerifyEmail' => $user->id == auth()->user()->id
+                ? auth()->user() instanceof MustVerifyEmail
                 : null,
             'posts' => [
                 'count' => $posts->total(),
@@ -62,11 +57,8 @@ class ViewUsersController extends Controller
         ]);
     }
 
-
-
-
-
-    private function restructSocials($user) {
+    private function restructSocials($user)
+    {
         $user->socials = [
             'website' => $user->website,
             'twitter' => $user->twitter,
@@ -75,13 +67,14 @@ class ViewUsersController extends Controller
             'linkedin' => $user->linkedin,
             'medium' => $user->medium,
         ];
-        unset($user->website, 
-            $user->twitter, 
-            $user->instagram, 
-            $user->facebook, 
-            $user->linkedin, 
+        unset($user->website,
+            $user->twitter,
+            $user->instagram,
+            $user->facebook,
+            $user->linkedin,
             $user->medium
         );
+
         return $user;
     }
 }

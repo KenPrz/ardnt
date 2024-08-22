@@ -41,12 +41,13 @@ class Comment extends Model
 
     public static function canUserComment($userId)
     {
-        $key = 'user_comment_count_' . $userId;
+        $key = 'user_comment_count_'.$userId;
         $commentCount = Cache::get($key, 0);
         if ($commentCount >= 20) {
             return false;
         }
         Cache::put($key, $commentCount + 1, now()->addMinutes(5));
+
         return true;
     }
 }

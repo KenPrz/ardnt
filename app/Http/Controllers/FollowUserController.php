@@ -33,6 +33,7 @@ class FollowUserController extends Controller
             ->first();
         if ($follower) {
             $follower->delete();
+
             return back()->with('success', 'User unfollowed successfully');
         } else {
             throw new \Exception('Failed to unfollow user');

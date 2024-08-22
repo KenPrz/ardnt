@@ -33,7 +33,7 @@ class PostFactory extends Factory
             '<p>The first paragraph introduces the topic of <strong>web development</strong> and its relevance in today\'s tech world.</p><p>The second paragraph describes how it is an <em>exciting</em> field filled with opportunities and innovations.</p><p>In the third paragraph, we discuss the importance of staying updated with <s>outdated</s> new technologies to remain competitive.</p>',
             '<p>Opening statement: Here\'s an intriguing <strong>fact</strong> about human behavior.</p><p>In the following details, did you know that the average person spends <em>up to six months</em> of their life waiting for traffic lights to change?</p><p>This fascinating statistic sheds light on how we experience time in our daily lives.</p>',
         ];
-        
+
         return [
             'user_id' => $this->faker->numberBetween(1, $num_of_users),
             'title' => $this->faker->sentence(3),

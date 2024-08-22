@@ -27,6 +27,8 @@ class Post extends Model
         'is_public' => 'boolean',
     ];
 
+    protected $appends = ['is_liked_by_user'];
+
     /**
      * Get the user that owns the post.
      *
@@ -50,11 +52,6 @@ class Post extends Model
     /**
      * Define a many-to-many relationship between the Post model and the User model.
      *
-     * This method returns an instance of the BelongsToMany class, which represents the relationship
-     * between the Post model and the User model. The relationship is defined through the 'likes' table.
-     * The 'likes' table is used to store the many-to-many relationship between posts and users.
-     * The 'likedByUsers' method allows you to retrieve the users who have liked a particular post.
-     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function likedByUsers()
@@ -63,14 +60,17 @@ class Post extends Model
     }
 
     /**
-     * Check if the post is not liked by a specific user.
+     * Check if the post is liked by the currently authenticated user.
      *
-     * @param  int  $user_id  The ID of the user.
-     * @return bool Returns true if the post is not liked by the user, false otherwise.
+     * @return bool
      */
-    public function isLikedByUser($user_id): bool
+    public function getIsLikedByUserAttribute()
     {
-        return $this->likedByUsers->contains($user_id);
+        if (auth()->check()) {
+            return $this->likedByUsers->contains(auth()->id());
+        }
+
+        return false;
     }
 
     /**
@@ -114,13 +114,25 @@ class Post extends Model
         return $query->with([
             'user',
             'comments' => function ($query) {
-                $query->latest('created_at')->take(100);  // Limit to 100 latest comments (change as needed)
+                $query->latest('created_at')->take(100);
             },
-            'comments.user',
-            'likedByUsers',
-            'originalPost',
+            'comments.user' => function ($query) {
+                $query->select('id', 'first_name', 'last_name', 'avatar', 'handle');
+            },
+            'theme' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'likedByUsers' => function ($query) {
+                $query->select('users.id', 'users.first_name', 'users.last_name', 'users.avatar', 'users.handle');
+            },
+            'originalPost' => function ($query) {
+                $query->select('id', 'title', 'content', 'theme_id', 'cover_image', 'is_public', 'user_id', 'is_shared', 'shared_post_id')
+                    ->with(['theme' => function ($query) {
+                        $query->select('id', 'name');
+                    }]);
+            },
             'shares',
         ])
-        ->withCount(['comments', 'likedByUsers']);
+            ->withCount(['comments', 'likedByUsers']);
     }
 }

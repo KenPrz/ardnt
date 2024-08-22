@@ -14,11 +14,11 @@ class UserSocialsRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        
+
         if (filter_var($value, FILTER_VALIDATE_URL)) {
-            $fail("Please only use your username.");
+            $fail('Please only use your username.');
         } elseif (strpos($value, ' ') !== false) {
-            $fail("Username cannot contain spaces.");
+            $fail('Username cannot contain spaces.');
         }
     }
 }

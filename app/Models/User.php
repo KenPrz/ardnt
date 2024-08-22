@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,6 +78,7 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_follower', 'user_id', 'follower_id')
             ->withTimestamps();
     }
+
     public function isFollowedByMe()
     {
         return $this->followers->contains('id', auth()->id());
@@ -87,7 +87,7 @@ class User extends Authenticatable
     /**
      * Check if the user follows another user.
      *
-     * @param int $user_id The ID of the user to check if the current user follows.
+     * @param  int  $user_id  The ID of the user to check if the current user follows.
      * @return bool Returns true if the user follows the specified user, otherwise false.
      */
     public function isFollowing($user_id)
@@ -99,7 +99,7 @@ class User extends Authenticatable
     /**
      * Check if the user is followed by another user.
      *
-     * @param int $user_id The ID of the user to check if they are following.
+     * @param  int  $user_id  The ID of the user to check if they are following.
      * @return bool Returns true if the user is followed by the specified user, otherwise false.
      */
     public function isFollowed($user_id)

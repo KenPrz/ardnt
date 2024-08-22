@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowUserController;
 use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ViewUsersController;
-use App\Http\Controllers\CommentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -43,7 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/{user}/posts', [ViewUsersController::class, 'getPosts'])->name('users.posts');
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments', [CommentController::class, 'update'])->name('comments.update');
-    Route::delete('/comment', [CommentController::class,'destroy'])->name('comments.destroy');
+    Route::delete('/comment', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 //auth routes

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\UserSocialsRule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserSocialsRequest extends FormRequest
 {
@@ -23,12 +23,12 @@ class UserSocialsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'website' => ['nullable', 'string','max:255', 'url'],
-            'twitter' => ['nullable', 'string', new UserSocialsRule,'max:255'],
-            'instagram' => ['nullable', 'string', new UserSocialsRule,'max:255'],
-            'facebook' => ['nullable', 'string', new UserSocialsRule,'max:255'],
-            'linkedin' => ['nullable', 'string', new UserSocialsRule,'max:255'],
-            'medium' => ['nullable', 'string', new UserSocialsRule,'max:255'],
+            'website' => ['nullable', 'string', 'max:255', 'url'],
+            'twitter' => ['nullable', 'string', new UserSocialsRule, 'max:255'],
+            'instagram' => ['nullable', 'string', new UserSocialsRule, 'max:255'],
+            'facebook' => ['nullable', 'string', new UserSocialsRule, 'max:255'],
+            'linkedin' => ['nullable', 'string', new UserSocialsRule, 'max:255'],
+            'medium' => ['nullable', 'string', new UserSocialsRule, 'max:255'],
         ];
     }
 }

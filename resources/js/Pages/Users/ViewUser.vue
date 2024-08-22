@@ -167,7 +167,7 @@ const closeModal = () => {
             </div>
           </div>
         </section>
-        <div class="container mx-auto mt-8">
+        <div class="mx-5 md:min-w-[60rem] md:mx-auto mt-8">
           <Tabbar :tabs="tabs">
             <template v-slot:tab1>
               <!-- User Posts Section -->

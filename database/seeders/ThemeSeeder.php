@@ -13,19 +13,19 @@ class ThemeSeeder extends Seeder
     public function run(): void
     {
         $themes = [
-            'prose',
-            'poetry',
-            'fiction',
-            'non-fiction',
-            'drama',
-            'comedy',
-            'tragedy',
-            'romance',
-            'mystery',
-            'thriller',
-            'horror',
-            'fantasy',
-            'science fiction',
+            'Prose',
+            'Poetry',
+            'Fiction',
+            'Non-fiction',
+            'Drama',
+            'Comedy',
+            'Tragedy',
+            'Romance',
+            'Mystery',
+            'Thriller',
+            'Horror',
+            'Fantasy',
+            'Science Fiction',
         ];
 
         foreach ($themes as $theme) {

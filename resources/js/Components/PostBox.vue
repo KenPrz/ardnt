@@ -46,10 +46,14 @@ function closeViewPostModal() {
         </div>
         <!-- Post Content -->
         <div class="p-4">
-            <!-- Title -->
-            <h2 class="text-2xl font-customSerif font-semibold text-maroon-600 mb-2">
-                {{ post.title }}
-            </h2>
+            <div class="flex flex-col mb-2">
+                <!-- Title -->
+                <h2 class="text-2xl font-customSerif font-semibold text-maroon-600">
+                    {{ post.title }}
+                </h2>
+                <!-- Theme -->
+                <span class="text-sm text-gray-600">#{{ post.theme.name }}</span>
+            </div>
             <!-- Post Meta -->
             <div class="flex items-center text-sm text-gray-500 mb-4">
                 <a :href="route('users.show', post.user.handle)" class="hover:underline">

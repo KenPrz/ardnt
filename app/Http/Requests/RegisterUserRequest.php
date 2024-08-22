@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\UserHandleRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
-use App\Rules\UserHandleRule;
 
 class RegisterUserRequest extends FormRequest
 {

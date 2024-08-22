@@ -29,8 +29,9 @@ class UserFactory extends Factory
             'avatars/pfp8.jpeg',
             'avatars/pfp9.jpeg',
             'avatars/pfp10.jpeg',
-            'avatars/pfp11.jpeg'
-        ];          
+            'avatars/pfp11.jpeg',
+        ];
+
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),

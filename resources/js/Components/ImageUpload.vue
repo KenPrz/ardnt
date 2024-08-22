@@ -1,10 +1,12 @@
 <script setup>
+import 'vue-advanced-cropper/dist/style.css';
 import { ref, watch } from 'vue';
 import { Cropper } from 'vue-advanced-cropper';
-import 'vue-advanced-cropper/dist/style.css';
-import Modal from '@/Components/Modal.vue';
 import { useForm } from '@inertiajs/vue3';
-
+import { useToast } from 'vue-toastification';
+import Modal from '@/Components/Modal.vue';
+import InputError from '@/Components/InputError.vue';
+const toast = useToast();
 const props = defineProps({
   currentAvatar: {
     type: String,
@@ -54,10 +56,10 @@ const uploadImage = () => {
   form.post(route('profile.avatar.store'), {
     preserveScroll: true,
     onSuccess: () => {
-      // Handle success (e.g., show a notification)
+      toast.success('Profile picture updated successfully');
     },
     onError: () => {
-      // Handle error (e.g., show an error message)
+      toast.error(form.errors.avatar);
     }
   });
 };

@@ -27,7 +27,6 @@ class NewsFeedController extends Controller
             ->toArray();
 
         $followerCount = count($followerIds);
-
         // Define thresholds for follower count
         $smallFollowerThreshold = 5; // Adjust this value as needed
 
@@ -42,10 +41,6 @@ class NewsFeedController extends Controller
             $posts = $this->getAllPosts($followerIds);
         }
 
-        // Check if each post is liked by the authenticated user
-        foreach ($posts as $post) {
-            $post->is_liked_by_user = $post->isLikedByUser($user->id);
-        }
         return Inertia::render('Feed/NewsFeed', [
             'posts' => $posts,
             'followRecommendations' => $this->getRecommendedFollowers($user->id),
@@ -72,14 +67,14 @@ class NewsFeedController extends Controller
             ->where('id', '!=', $user_id)
             ->limit(5)
             ->get();
-    
+
         return $follow_recommendations;
     }
-    
-    
 
     /**
      * Retrieve public posts with related data.
+     *
+     * Used when the user has no followers or a small number of followers.
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */

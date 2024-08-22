@@ -22,8 +22,8 @@ class DeleteCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => "required|numeric|exists:users,id",
-            "comment_id" => "required|numeric|exists:comments,id"
+            'user_id' => 'required|numeric|exists:users,id',
+            'comment_id' => 'required|numeric|exists:comments,id',
         ];
     }
 }
