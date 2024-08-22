@@ -24,6 +24,9 @@ class PostFactory extends Factory
         $num_of_themes = Theme::count();
         $isShared = $num_of_posts > 0 && $this->faker->boolean(40); // 40% chance of being a shared post
         $images = ['img1.png', 'img2.png', 'img3.png', 'img4.png', 'img5.png', 'img6.png', 'img7.png', 'img8.png'];
+        
+        $is_shared = $this->faker->boolean(50);
+        $has_img = $this->faker->boolean(50);
         $htmlContents = [
             '<p>This is a short post with <strong>bold</strong> and <em>italic</em> text.</p>',
             '<p>Here is a longer post that includes more content. We use <strong>bold text</strong> to highlight key points and <em>italic text</em> to emphasize certain words. This paragraph goes on to provide additional details and context to ensure the reader fully understands the subject matter discussed.</p>',
@@ -40,9 +43,15 @@ class PostFactory extends Factory
             'content' => $this->faker->randomElement($htmlContents),
             'theme_id' => rand(1, $num_of_themes),
             'is_public' => $this->faker->boolean(50),
-            'cover_image' => $this->faker->randomElement($images),
+            'cover_image' => $is_shared 
+                ? null 
+                : ($has_img 
+                    ? $this->faker->randomElement($images) 
+                    : null),
             'is_shared' => $isShared,
-            'shared_post_id' => $isShared ? $this->faker->numberBetween(1, $num_of_posts) : null,
+            'shared_post_id' => $isShared 
+                ? $this->faker->numberBetween(1, $num_of_posts) 
+                : null,
         ];
     }
 }

@@ -14,13 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create users first
-        User::factory(100)->create();
+
         User::factory()->create([
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
+        User::factory(300)->create();
 
         // Optionally: Create themes if they are used in posts
         $this->call(ThemeSeeder::class);
