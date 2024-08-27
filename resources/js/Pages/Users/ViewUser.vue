@@ -170,6 +170,9 @@ const closeModal = () => {
                 <i class="pi pi-cog" style="font-size: 1em;"></i>
                 <span>Edit Profile</span>
               </button>
+              <Modal maxWidth="2xl" :show="isEditing" @close="closeModal">
+                <Edit :user="user" />
+              </Modal>
             </div>
           </div>
         </section>
