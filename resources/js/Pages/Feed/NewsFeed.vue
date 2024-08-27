@@ -1,6 +1,6 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, provide } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import Pagination from '@/Components/Pagination.vue';
@@ -22,6 +22,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+provide('themes', props.themes);
 
 // modal state
 const showShareModal = ref(false);

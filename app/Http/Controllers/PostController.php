@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreationRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,37 +11,30 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created post in the database.
+     *
+     * @param  \App\Http\Requests\PostCreationRequest  $request
+     * @return void
      */
     public function store(PostCreationRequest $request)
     {
         if ($request->is_shared) {
             $this->sharedPostHandler($request);
         }
-
-        $fileName = null;
-
-        $extension = $request->file('cover_image')->getClientOriginalExtension();
-        $fileName = uniqid().'_'.time().'.'.$extension;
-
-        Storage::disk($request->is_public ? 'public' : 'private')
-            ->put('images/'.$fileName, file_get_contents($request->file('cover_image')));
-
         Post::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
             'content' => $request->content,
             'theme_id' => $request->theme,
-            'cover_image' => $fileName,
+            'cover_image' => $request->cover_image == null
+                ? null 
+                : $request->file('cover_image')
+                    ->store('images', $request->is_public 
+                        ? 'public' 
+                        : 'private'
+                    ),
             'is_public' => $request->is_public,
             'is_shared' => $request->is_shared,
             'shared_post_id' => null,
@@ -66,19 +60,12 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PostUpdateRequest $request)
     {
-        //
+        $post = Post::findOrFail($request->id);
+        $post->fill($request->validated())->save();
     }
 
     /**

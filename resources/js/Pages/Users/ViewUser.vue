@@ -11,6 +11,7 @@ import FollowerList from './partials/FollowersList.vue';
 import FollowingList from './partials/FollowingList.vue';
 import FollowButton from '@/Components/FollowButton.vue';
 import Modal from '@/Components/Modal.vue';
+import CreatePost from '@/Components/CreatePost.vue';
 
 // Props
 const props = defineProps({
@@ -24,16 +25,26 @@ const props = defineProps({
   },
   followers: {
     type: Object,
-    required: true,
+  required: true,
   },
   following: {
     type: Object,
     required: true,
   },
+  themes: {
+    type: Array,
+  },
 });
 
 const isEditing = ref(false);
+const showCreatePostModal = ref(false);
 
+function createPost() {
+    showCreatePostModal.value = true;
+}
+function closeCreatePostModal() {
+    showCreatePostModal.value = false;
+}
 // Tabs setup
 const tabs = [
   { label: 'Posts', name: 'tab1' },
@@ -68,13 +79,8 @@ const closeModal = () => {
 </script>
 
 <template>
-
-  <Head title="Dashboard" />
+  <Head :title="user.handle" />
   <AuthenticatedLayout>
-    <Modal v-if="user.id == $page.props.auth.user.id" :show="isEditing" @close="closeModal">
-      <!-- Edit Profile -->
-      <Edit />
-    </Modal>
     <div class="w-full flex justify-center">
       <div class="max-w-4xl">
         <section class="flex flex-col items-center md:flex-row my-3 py-5 space-x-6">
@@ -103,7 +109,7 @@ const closeModal = () => {
             <a :href="route('users.show', user.handle)">
               <h2 class="text-center md:text-start text-md text-gray-500">@{{ user.handle }}</h2>
             </a>
-            <div class="min-h-[1rem] md:min-h-[3rem] flex items-center justify-center md:justify-start">
+            <div class="min-h-[1rem] md:min-h-[2rem] flex items-center justify-center md:justify-start">
               <p v-if="hasQuote" class="text-center md:text-start text-md text-sm md:text-lg text-gray-700 italic">
                 "{{ user.quote }}"
                 <span v-if="user.id == $page.props.auth.user.id">
@@ -114,7 +120,7 @@ const closeModal = () => {
               </p>
             </div>
             <div
-              class="flex flex-col md:flex-row w-full md:w-4/5 justify-center md:justify-between mt-3 space-y-2 space-x-2  md:space-y-0">
+              class="flex flex-col md:flex-row w-full md:w-4/5 justify-center md:justify-between space-y-2 space-x-2  md:space-y-0">
               <div class="flex justify-center md:justify-start space-x-2">
                 <div>
                   <div class="flex space-x-1">
@@ -167,7 +173,24 @@ const closeModal = () => {
             </div>
           </div>
         </section>
-        <div class="mx-5 md:min-w-[60rem] md:mx-auto mt-8">
+        <section class="w-full flex justify-center"
+              v-if="user.id == $page.props.auth.user.id">
+          <div class="w-full flex justify-between items-center py-3 mx-10">
+              <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
+                  <CreatePost
+                      @close="closeCreatePostModal"
+                      :themes="themes"
+                  />
+              </Modal>
+              <button @click="createPost" class="w-full flex justify-between items-center 
+                  mx-10 md:mx-20 py-5 px-5 bg-maroon-400 rounded-xl hover:bg-maroon-500
+                  transition-colors duration-200">
+                  <span class="font-semibold text-white">Create Post</span>
+                  <i class="pi pi-pencil" style="font-size: 1.2em; color: white;"></i>
+              </button>
+          </div>
+        </section>
+        <div class="mx-5 md:mx-auto mt-8 w-full">
           <Tabbar :tabs="tabs">
             <template v-slot:tab1>
               <!-- User Posts Section -->

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\PostContentRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\PostContentRule;
 
-class PostCreationRequest extends FormRequest
+class PostUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,6 +23,7 @@ class PostCreationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'required|numeric|exists:posts,id',
             'title' => 'required|string|max:64|min:5',
             'content' => ['required', 'string', 'max:5000', 'min:5', new PostContentRule],
             'theme' => 'required|numeric|exists:themes,id',
@@ -31,6 +32,5 @@ class PostCreationRequest extends FormRequest
             'is_shared' => 'required|boolean',
             'shared_post_id' => ['nullable', 'numeric', 'exists:posts,id'],
         ];
-
     }
 }

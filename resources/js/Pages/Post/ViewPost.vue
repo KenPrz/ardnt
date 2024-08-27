@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import CommentsContainer from './partials/CommentsContainer.vue'; // Adjust import as needed
+import OriginalPostContainer from '@/Components/OriginalPostContainer.vue';
 
 const emit = defineEmits(['sharePost','likePost','unlikePost']);
 
@@ -32,12 +33,13 @@ function toggleComments() {
 <template>
     <div class="flex flex-col rounded-lg shadow-lg overflow-hidden w-full">
         <!-- Post Image -->
-        <div class="w-full">
+        <div v-if="post.cover_image" class="w-full">
             <img 
                 class="object-cover w-full h-72 rounded-t-lg"
-                :src="'/storage/images/' + post.cover_image"
+                :src="'/storage/' + post.cover_image"
                 :alt="post.title"
             />
+
         </div>
         <!-- Post Content -->
         <div class="p-4">
@@ -61,6 +63,13 @@ function toggleComments() {
             <p class="text-gray-700 mb-4">
                 <div v-html="props.post.content"></div>
             </p>
+
+            <div v-if="post.is_shared" class="py-2">
+                <OriginalPostContainer 
+                    :originalPost="post.original_post"
+                    :postSharer="post.user"
+                />
+            </div>
             <!-- Interaction Buttons -->
             <div class="flex items-center justify-between">
                 <div class="flex space-x-2">

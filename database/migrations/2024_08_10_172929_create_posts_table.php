@@ -17,7 +17,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->foreignId('theme_id')->nullable()
                 ->constrained('themes');
-            $table->string('title', 64);
+            $table->string('title', 64)->nullable();
             $table->text('content');
             $table->boolean('is_public')->default(false);
             $table->string('cover_image')->nullable();

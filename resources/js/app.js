@@ -15,7 +15,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const options = {
     transition: "Vue-Toastification__bounce",
     maxToasts: 20,
-    timeout: 3000,
+    timeout: 2500,
     newestOnTop: true,
     position: "bottom-right",
     closeOnClick: true,
@@ -23,7 +23,6 @@ const options = {
     pauseOnHover: true,
     draggable: true,
     draggablePercent: 0.3,
-    showCloseButtonOnHover: true,
     hideProgressBar: false,
     closeButton: "button",
     icon: false,

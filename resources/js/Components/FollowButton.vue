@@ -63,15 +63,17 @@ function unfollowUser() {
     <button
         @click="props.is_followed ? unfollowUser() : followUser()"
         :class="[
-            'transition-colors duration-200 py-2',
-            props.is_styled
-                ? props.is_followed
-                    ? 'bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full px-3'
-                    : 'bg-maroon-500 hover:bg-maroon-600 text-white rounded-full px-3'
-                : 'text-maroon-500 hover:text-maroon-600 font-semibold',
+                form.processing ? 'opacity-50 cursor-not-allowed' : '',
+                'transition-colors duration-200 py-2 flex space-x-2 items-center',
+                props.is_styled
+                    ? props.is_followed
+                        ? 'bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full px-3'
+                        : 'bg-maroon-500 hover:bg-maroon-600 text-white rounded-full px-3'
+                    : 'text-maroon-500 hover:text-maroon-600 font-semibold',
         ]"
         :disabled="form.processing"
     >
+        <i v-show="form.processing" class="animate-spin pi pi-spinner me-1" style="font-size: .9em;"></i>
         {{ props.is_followed ? 'Unfollow' : 'Follow' }}
     </button>
 </template>

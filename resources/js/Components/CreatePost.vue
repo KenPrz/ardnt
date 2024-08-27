@@ -124,8 +124,14 @@ function submitPost() {
             <InputError :message="form.errors.content" />
         </div>
         <div class="mt-5">
-            <button @click="submitPost" class="w-full p-3 hover:bg-maroon-600 bg-maroon-500 transition-colors duration:200 text-white rounded-lg">
-                Create Post
+            <button 
+            @click="submitPost"
+            :disabled="form.processing"
+            :class="{
+                'w-full p-3 hover:bg-maroon-600 bg-maroon-500 transition-colors duration-200 text-white rounded-lg': !form.processing,
+                'w-full p-3 bg-gray-400 cursor-not-allowed text-gray-700 rounded-lg': form.processing
+            }">
+            Create Post
             </button>
         </div>
     </div>

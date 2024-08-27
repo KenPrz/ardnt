@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
-        User::factory(300)->create();
+        User::factory(50)->create();
 
         // Optionally: Create themes if they are used in posts
         $this->call(ThemeSeeder::class);
