@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import SharePost from './SharePost.vue';
 import Modal from '@/Components/Modal.vue';
-import CommentsContainer from './partials/CommentsContainer.vue'; // Adjust import as needed
+import CommentsContainer from './partials/CommentsContainer.vue';
 import OriginalPostContainer from '@/Components/OriginalPostContainer.vue';
 
 const props = defineProps({
