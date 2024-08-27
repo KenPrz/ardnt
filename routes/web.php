@@ -31,30 +31,46 @@ Route::get('/', function () {
     ]);
 });
 
+// Routes with 'auth' and 'verified' middleware
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [NewsFeedController::class, 'index'])->name('dashboard');
+    
+    // Dashboard route
+    Route::get('/feed', [NewsFeedController::class, 'index'])->name('dashboard');
+    
+    // Post Like/Unlike routes
     Route::post('/like-post', [LikePostController::class, 'like'])->name('post.like');
     Route::delete('/unlike-post', [LikePostController::class, 'unlike'])->name('post.unlike');
+
+    // Follow/Unfollow User routes
     Route::post('/follow-user', [FollowUserController::class, 'follow'])->name('user.follow');
     Route::delete('/unfollow-user', [FollowUserController::class, 'unfollow'])->name('user.unfollow');
+    
+    // Post routes
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::put('/posts', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts', [PostController::class,'destroy'])->name('posts.destroy');
+    Route::delete('/posts', [PostController::class, 'destroy'])->name('posts.destroy');
+    
+    // User viewing routes
     Route::get('/users/{user}', [ViewUsersController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/posts', [ViewUsersController::class, 'getPosts'])->name('users.posts');
+
+    // Comment routes
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comment', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-//auth routes
+// Routes with 'auth' middleware only
 Route::middleware('auth')->group(function () {
+    
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/avatar', [ProfileController::class, 'avatar'])->name('profile.avatar.store');
     Route::patch('/profile/socials', [ProfileController::class, 'updateSocials'])->name('profile.update.socials');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';

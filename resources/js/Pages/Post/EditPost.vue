@@ -1,11 +1,12 @@
 <script setup>
-import { inject } from 'vue';
+import { ref, inject, defineEmits } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { useToast } from 'vue-toastification';
 import Editor from '@/Components/Editor.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Modal from '@/Components/Modal.vue';
 import OriginalPostContainer from '@/Components/OriginalPostContainer.vue';
 
 const emit = defineEmits(['close']);
@@ -18,6 +19,7 @@ const props = defineProps({
 });
 
 const themes = inject('themes');
+const showDeleteModal = ref(false); // State to manage modal visibility
 
 const form = useForm({
     id: props.post.id,
@@ -38,8 +40,24 @@ function updatePost() {
             setTimeout(() => {
                 emit('close');
             }, 500);
-        },onError: (error) => {
-            console.log(error); 
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
+}
+
+function deletePost() {
+    form.delete(route('posts.destroy'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Post deleted successfully');
+            setTimeout(() => {
+                emit('close');
+            }, 500);
+        },
+        onError: (error) => {
+            console.log(error);
         },
     });
 }
@@ -57,22 +75,24 @@ function updatePost() {
             <div class="w-full mb-4">
                 <TextInput
                     :disabled="form.processing"
-                    v-model="form.title" label="Title" 
-                    type="text" name="title" 
-                    :errors="form.errors.title" 
-                    class="w-full" 
+                    v-model="form.title"
+                    label="Title"
+                    type="text"
+                    name="title"
+                    :errors="form.errors.title"
+                    class="w-full"
                 />
             </div>
 
             <!-- Post Meta -->
             <div class="mb-4 text-sm text-gray-500">
                 <div class="flex items-center space-x-3 mb-4">
-                    <Checkbox 
+                    <Checkbox
                         :disabled="form.processing"
-                        :checked="form.is_public" 
-                        v-model="form.is_public" 
-                        name="is_public" 
-                        label="Public" 
+                        :checked="form.is_public"
+                        v-model="form.is_public"
+                        name="is_public"
+                        label="Public"
                         :errors="form.errors.is_public"
                     />
                     <span>{{ form.is_public ? 'Public' : 'Private' }}</span>
@@ -80,8 +100,11 @@ function updatePost() {
                 <div>
                     <label for="theme" class="block mb-2 text-sm font-medium text-gray-700">Theme</label>
                     <select
-                        :disabled="form.processing" 
-                        v-model="form.theme" id="theme" class="w-full border border-gray-300 rounded-lg p-2">
+                        :disabled="form.processing"
+                        v-model="form.theme"
+                        id="theme"
+                        class="w-full border border-gray-300 rounded-lg p-2"
+                    >
                         <option value="" disabled>Select a theme</option>
                         <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                             {{ theme.name }}
@@ -94,7 +117,7 @@ function updatePost() {
             <!-- Excerpt -->
             <div class="mb-4 text-gray-700" :class="{ 'pointer-events-none': form.processing }">
                 <Editor v-model="form.content">
-                    <button class="me-2" :disabled="form.processing">
+                    <button @click="showDeleteModal = true" class="me-2" :disabled="form.processing">
                         <i class="pi pi-trash" style="font-size: 1em; color: red;"></i>
                     </button>
                 </Editor>
@@ -110,14 +133,29 @@ function updatePost() {
         <div class="flex items-center p-6">
             <button
                 :disabled="form.processing"
-                @click="updatePost" 
-                :class="[form.processing ? 'bg-maroon-300':'bg-maroon-500 hover:bg-maroon-600','transition-colors duration-200 text-white w-full p-3 rounded-xl']">
+                @click="updatePost"
+                :class="[form.processing ? 'bg-maroon-300':'bg-maroon-500 hover:bg-maroon-600','transition-colors duration-200 text-white w-full p-3 rounded-xl']"
+            >
                 <i v-show="form.processing" class="animate-spin pi pi-spinner me-1" style="font-size: .9em;"></i>
                 <span v-if="form.processing">Updating</span>
                 <span v-else>Update</span> Post
             </button>
         </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <Modal maxWidth="md" :show="showDeleteModal" @close="showDeleteModal = false">
+        <template #default>
+            <div class="p-6">
+                <h2 class="text-lg font-semibold">Confirm Delete</h2>
+                <p class="mt-2 text-sm text-gray-600">Are you sure you want to delete this post? This action cannot be undone.</p>
+                <div class="mt-4 flex justify-end">
+                    <button @click="showDeleteModal = false" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
+                    <button @click="deletePost" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+                </div>
+            </div>
+        </template>
+    </Modal>
 </template>
 
 <style scoped>

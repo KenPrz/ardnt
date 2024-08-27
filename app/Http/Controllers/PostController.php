@@ -71,9 +71,17 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required|exists:posts,id',
+        ]);
+        $post = Post::findOrFail($request->id);
+        if($post->user_id == auth()->id()){
+            $post->delete();
+        }else{
+            abort(403);
+        }
     }
 
     private function sharedPostHandler($request)
