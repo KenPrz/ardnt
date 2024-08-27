@@ -23,7 +23,7 @@ class PostCreationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:64|min:5',
+            'title' => $this->is_shared ? 'nullable|string|max:64|min:5' : 'required|string|max:64|min:5',
             'content' => ['required', 'string', 'max:5000', 'min:5', new PostContentRule],
             'theme' => 'required|numeric|exists:themes,id',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',

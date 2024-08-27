@@ -72,7 +72,7 @@ function deletePost() {
         <!-- Post Content -->
         <div class="p-6">
             <!-- Title -->
-            <div class="w-full mb-4">
+            <div v-if="!post.is_shared" class="w-full mb-4">
                 <TextInput
                     :disabled="form.processing"
                     v-model="form.title"
@@ -83,7 +83,6 @@ function deletePost() {
                     class="w-full"
                 />
             </div>
-
             <!-- Post Meta -->
             <div class="mb-4 text-sm text-gray-500">
                 <div class="flex items-center space-x-3 mb-4">

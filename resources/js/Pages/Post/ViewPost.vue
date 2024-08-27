@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
+import SharePost from './SharePost.vue';
+import Modal from '@/Components/Modal.vue';
 import CommentsContainer from './partials/CommentsContainer.vue'; // Adjust import as needed
 import OriginalPostContainer from '@/Components/OriginalPostContainer.vue';
-
-const emit = defineEmits(['sharePost','likePost','unlikePost']);
 
 const props = defineProps({
     post: {
@@ -18,13 +18,16 @@ const props = defineProps({
     },
 });
 const isCommentsOpen = ref(false);
+const showSharePostModal = ref(false);
+function sharePost() {
+    showSharePostModal.value = true;
+}
+function closeSharePostModal() {
+    showSharePostModal.value = false;
+}
 setTimeout(() => {
     isCommentsOpen.value = props.openComments;
 }, .800);
-
-function sharePost(post) {
-    emit('sharePost', post);
-}
 function toggleComments() {
     isCommentsOpen.value = !isCommentsOpen.value;
 }
@@ -91,6 +94,15 @@ function toggleComments() {
                     <button @click="sharePost(post)" class="text-gray-500 text-sm flex items-center">
                         <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
                     </button>
+                    <!-- Modal for sharing post -->
+                    <Modal maxWidth="xl" :show="showSharePostModal" @close="closeSharePostModal">
+                        <SharePost
+                            :post_to_share="post.original_post 
+                                ? post.original_post
+                                : post"
+                            :user="$page.props.auth.user"
+                        />
+                    </Modal>
                 </div>
             </div>
             <div class="flex flex-col mt-4">

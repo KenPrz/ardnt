@@ -1,0 +1,28 @@
+<script setup>
+import { Head } from '@inertiajs/vue3';
+import { provide } from 'vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import ViewPost from './ViewPost.vue';
+const props = defineProps({
+    post: {
+        type: Object,
+        required: true,
+    },
+    themes: {
+        type: Array,
+        required: true,
+    },
+});
+provide('themes',props.themes);
+</script>
+<template>
+    <AuthenticatedLayout>
+        <div class="mx-auto w-full max-w-xl px-4 py-10">
+            <ViewPost
+                class="bg-white rounded-lg shadow-lg overflow-hidden w-full"
+                :post="post"
+                :originalPost="originalPost"
+            />
+        </div>
+    </AuthenticatedLayout>
+</template>

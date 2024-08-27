@@ -6,7 +6,6 @@ import Modal from '@/Components/Modal.vue';
 import Pagination from '@/Components/Pagination.vue';
 import PostBox from '@/Components/PostBox.vue';
 import FollowBox from './Partials/FollowBox.vue';
-import SharePost from '@/Components/SharePost.vue';
 import CreatePost from '@/Components/CreatePost.vue';
 const props = defineProps({
     posts: {
@@ -38,10 +37,6 @@ function createPost() {
 function closeCreatePostModal() {
     showCreatePostModal.value = false;
 }
-function sharePost(post) {
-    postToShare.value = post;
-    showShareModal.value = true;
-}
 
 function closeShareModal() {
     postToShare.value = null;
@@ -52,9 +47,6 @@ function closeShareModal() {
 <template>
     <Head title="Dashboard" />
     <AuthenticatedLayout>
-        <Modal maxWidth="md" :show="showShareModal" @close="closeShareModal">
-            <SharePost :post="postToShare" />
-        </Modal>
         <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
             <CreatePost
                 @close="closeCreatePostModal"
@@ -77,9 +69,9 @@ function closeShareModal() {
                     </div>
                     <div class="w-full">
                         <template v-for="post in posts.data" :key="post.id">
-                            <PostBox 
-                                @sharePost="sharePost"
-                                :post="post" />
+                            <PostBox
+                                :post="post" 
+                            />
                         </template>
                         <div class="px-4">
                             <Pagination :first_page_url="posts.first_page_url" :from="posts.from"

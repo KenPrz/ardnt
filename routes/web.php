@@ -47,10 +47,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Post routes
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::post('/posts/share-post', [PostController::class, 'sharePost'])->name('posts.share');
     Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::put('/posts', [PostController::class, 'update'])->name('posts.update');
     Route::delete('/posts', [PostController::class, 'destroy'])->name('posts.destroy');
-    
+
     // User viewing routes
     Route::get('/users/{user}', [ViewUsersController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/posts', [ViewUsersController::class, 'getPosts'])->name('users.posts');

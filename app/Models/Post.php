@@ -126,7 +126,7 @@ class Post extends Model
                 $query->select('users.id', 'users.first_name', 'users.last_name', 'users.avatar', 'users.handle');
             },
             'originalPost' => function ($query) {
-                $query->select('id', 'title', 'content', 'theme_id', 'cover_image', 'is_public', 'user_id', 'is_shared')
+                $query->select('id', 'title', 'content', 'theme_id', 'cover_image', 'is_public', 'user_id', 'is_shared','created_at', 'updated_at')
                     ->with([
                         'user' => function ($query) {
                             $query->select('id', 'handle', 'avatar');

@@ -4,7 +4,6 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import UpdateSocialsForm from './Partials/UpdateSocialsForm.vue';
 import { Head } from '@inertiajs/vue3';
-
 defineProps({
     mustVerifyEmail: {
         type: Boolean,

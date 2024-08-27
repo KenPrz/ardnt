@@ -1,17 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import OriginalPostContainer from './OriginalPostContainer.vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import Modal from '@/Components/Modal.vue';
 import ViewPost from '@/Pages/Post/ViewPost.vue';
 import EditPost from '@/Pages/Post/EditPost.vue';
+import SharePost from '@/Pages/Post/SharePost.vue';
 import getRelativeTime from '@/custom-js/dateTimeCalc';
 
-const emit = defineEmits(['sharePost']);
-
-function sharePost(post) {
-    emit('sharePost', post);
-}
 const props = defineProps({
     post: {
         type: Object,
@@ -22,6 +18,7 @@ const props = defineProps({
 // Reactive variables for modal and comments
 const showViewPostModal = ref(false);
 const showEditPostModal = ref(false);
+const showSharePostModal = ref(false);
 const openComments = ref(false);
 
 // Function to open the modal and control comment state
@@ -34,6 +31,10 @@ function editPost() {
     showEditPostModal.value = true;
 }
 
+function sharePost() {
+    showSharePostModal.value = true;
+}
+
 // Function to close the modal
 function closeViewPostModal() {
     showViewPostModal.value = false;
@@ -41,6 +42,10 @@ function closeViewPostModal() {
 
 function closeEditPostModal() {
     showEditPostModal.value = false;
+}
+
+function closeSharePostModal() {
+    showSharePostModal.value = false;
 }
 </script>
 <template>
@@ -71,7 +76,9 @@ function closeEditPostModal() {
                     <span>@{{ post.user.handle  }}</span><span v-if="post.is_shared"> shared this post</span>
                 </a>
                 <span class="mx-2">•</span>
-                <span class="text-xs">{{ getRelativeTime(post.created_at) }}</span>
+                <a :href="route('posts.show',post.id)">
+                    <span class="text-xs hover:underline">{{ getRelativeTime(post.created_at) }}</span>
+                </a>
                 <span class="mx-2">•</span>
                 <i v-if="post.is_public" class="pi pi-globe" style="font-size: .9em;"></i>
                 <i v-else class="pi pi-users" style="font-size: .9em;"></i>
@@ -131,5 +138,15 @@ function closeEditPostModal() {
     <!-- Modal for editing post -->
     <Modal maxWidth="xl" :show="showEditPostModal" @close="closeEditPostModal">
         <EditPost :post="post" />
+    </Modal>
+
+    <!-- Modal for sharing post -->
+    <Modal maxWidth="xl" :show="showSharePostModal" @close="closeSharePostModal">
+        <SharePost
+            :post_to_share="post.original_post 
+                ? post.original_post // If post is a shared post, share the original post
+                : post" 
+            :user="$page.props.auth.user"
+        />
     </Modal>
 </template>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostCreationRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -20,9 +21,7 @@ class PostController extends Controller
      */
     public function store(PostCreationRequest $request)
     {
-        if ($request->is_shared) {
-            $this->sharedPostHandler($request);
-        }
+        $request = $request->validated();
         Post::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
@@ -51,11 +50,9 @@ class PostController extends Controller
     {
         $post = Post::withRelationsAndCounts()
             ->findOrFail($id);
-
-        $post->is_liked_by_user = $post->isLikedByUser(auth()->id());
-
-        return Inertia::render('Post/ViewPost', [
+        return Inertia::render('Post/PreviewPost', [
             'post' => $post,
+            'themes'=>Theme::all(),
         ]);
     }
 
@@ -84,8 +81,18 @@ class PostController extends Controller
         }
     }
 
-    private function sharedPostHandler($request)
+    public function sharePost(PostCreationRequest $request)
     {
-        dd($request->all());
+        $request = $request->validated();
+        Post::create([
+            'user_id' => auth()->id(),
+            'title' => null,
+            'content' => $request['content'],
+            'theme_id' => $request['theme'],
+            'cover_image' => null,
+            'is_public' => $request['is_public'],
+            'is_shared' => true,
+            'shared_post_id' => $request['shared_post_id'],
+        ]);
     }
 }

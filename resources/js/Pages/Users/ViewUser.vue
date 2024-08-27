@@ -1,6 +1,6 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, provide } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import ImageUpload from '@/Components/ImageUpload.vue';
@@ -35,6 +35,8 @@ const props = defineProps({
     type: Array,
   },
 });
+
+provide('themes', props.themes);
 
 const isEditing = ref(false);
 const showCreatePostModal = ref(false);
