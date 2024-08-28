@@ -4,7 +4,7 @@ import getRelativeTime from '@/custom-js/dateTimeCalc';
 const props = defineProps({
     originalPost: {
         type: Object,
-        required: true,
+        nullable: true,
     },
     postSharer: {
         type: Object,
@@ -14,7 +14,7 @@ const props = defineProps({
 const hasImage = computed(() => !!props.originalPost.cover_image);
 </script>
 <template>
-    <div v-if="originalPost">
+    <div v-if="originalPost">   
         <h1 v-show="hasImage" class="text-xl font-semibold font-customSerif text-maroon-500 mb-2">
             {{ originalPost.title }}
         </h1>
