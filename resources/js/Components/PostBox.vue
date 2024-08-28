@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import OriginalPostContainer from './OriginalPostContainer.vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import Modal from '@/Components/Modal.vue';
@@ -89,7 +89,7 @@ function closeSharePostModal() {
                 <div v-html="post.content"></div>
             </p>
             <div v-if="post.is_shared" class="py-2">
-                <OriginalPostContainer 
+                <OriginalPostContainer
                     :originalPost="post.original_post"
                     :postSharer="post.user"
                 />
@@ -113,8 +113,11 @@ function closeSharePostModal() {
                     </button>
                     
                     <!-- Share Button -->
-                    <button @click="sharePost(post)" class="text-gray-500 text-sm flex items-center">
-                        <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
+                    <button 
+                        v-if="post.original_post"
+                        @click="sharePost(post)" 
+                        class="text-gray-500 text-sm flex items-center">
+                            <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
                     </button>
 
                     <!-- Edit Button -->
