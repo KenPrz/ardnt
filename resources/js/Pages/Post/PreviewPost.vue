@@ -17,6 +17,7 @@ provide('themes',props.themes);
 </script>
 <template>
     <AuthenticatedLayout>
+        <Head :title="post.title" />
         <div class="mx-auto w-full max-w-xl px-4 py-10">
             <ViewPost
                 class="bg-white rounded-lg shadow-lg overflow-hidden w-full"

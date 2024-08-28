@@ -45,7 +45,7 @@ function closeShareModal() {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Feed" />
     <AuthenticatedLayout>
         <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
             <CreatePost

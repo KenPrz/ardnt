@@ -5,7 +5,6 @@ import { Cropper } from 'vue-advanced-cropper';
 import { useForm } from '@inertiajs/vue3';
 import { useToast } from 'vue-toastification';
 import Modal from '@/Components/Modal.vue';
-import InputError from '@/Components/InputError.vue';
 const toast = useToast();
 const props = defineProps({
   currentAvatar: {

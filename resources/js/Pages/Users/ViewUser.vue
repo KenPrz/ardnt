@@ -91,7 +91,13 @@ const closeModal = () => {
             <div class="flex flex-col items-center space-y-3 w-1/3">
               <div class="relative h-2/3 w-auto">
                 <ImageUpload v-if="user.id == $page.props.auth.user.id" :current-avatar="user.avatar" />
-                <img v-else-if="user.avatar" class="object-cover w-full h-full rounded-full" :src="'/storage/' + user.avatar"
+                <img v-else-if="user.avatar" 
+                  class="md:min-w-[15rem] md:min-h-[15rem]
+                    md:max-w-[15rem] md:max-h-[15rem]
+                    max-w-[10rem] max-h-[10rem]
+                    min-w-[10rem] min-h-[10rem]
+                    rounded-full object-cover" 
+                    :src="'/storage/' + user.avatar"
                   :alt="user.first_name" />
                 <i v-if="user.email_verified_at"
                   class="absolute pi pi-verified text-maroon-500 text-2xl md:text-3xl font-semibold bottom-1 right-4 md:right-6 md:bottom-3 bg-white rounded-full">
@@ -232,5 +238,5 @@ const closeModal = () => {
 </template>
 
 <style scoped>
-/* Add any necessary scoped styles here */
+
 </style>
