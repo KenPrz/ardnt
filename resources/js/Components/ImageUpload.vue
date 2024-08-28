@@ -10,7 +10,7 @@ const toast = useToast();
 const props = defineProps({
   currentAvatar: {
     type: String,
-    required: true
+    nullable: true
   }
 });
 
@@ -74,13 +74,17 @@ watch(() => form.avatar, (newValue) => {
 <template>
   <div>
     <div class="relative group">
-      <img :src="'/storage/'+currentAvatar" alt="Profile" 
+      
+      <img 
+        :src="currentAvatar ? '/storage/' + currentAvatar : '/public/default-avatar.jpg'"
+        alt="Profile" 
         class="md:min-w-[15rem] md:min-h-[15rem]
-               md:max-w-[15rem] md:max-h-[15rem]
-               max-w-[10rem] max-h-[10rem]
-               min-w-[10rem] min-h-[10rem]
-               rounded-full object-cover" 
-            />
+              md:max-w-[15rem] md:max-h-[15rem]
+              max-w-[10rem] max-h-[10rem]
+              min-w-[10rem] min-h-[10rem]
+              rounded-full object-cover" 
+      />
+
       <div
         class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
       >

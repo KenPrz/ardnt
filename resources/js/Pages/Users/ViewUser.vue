@@ -25,7 +25,7 @@ const props = defineProps({
   },
   followers: {
     type: Object,
-  required: true,
+    required: true,
   },
   following: {
     type: Object,
@@ -42,10 +42,10 @@ const isEditing = ref(false);
 const showCreatePostModal = ref(false);
 
 function createPost() {
-    showCreatePostModal.value = true;
+  showCreatePostModal.value = true;
 }
 function closeCreatePostModal() {
-    showCreatePostModal.value = false;
+  showCreatePostModal.value = false;
 }
 // Tabs setup
 const tabs = [
@@ -81,22 +81,24 @@ const closeModal = () => {
 </script>
 
 <template>
+
   <Head :title="user.handle" />
   <AuthenticatedLayout>
     <div class="w-full flex justify-center">
       <div class="max-w-4xl">
         <section class="flex flex-col items-center md:flex-row my-3 py-5 space-x-6">
           <div class="flex flex-col items-center space-y-3 w-1/3">
-            <div class="h-2/3 w-auto">
-              <ImageUpload
-                v-if="user.id == $page.props.auth.user.id"
-                :current-avatar="user.avatar"
-              />
-              <img 
-                v-else
-                class="object-cover w-full h-full rounded-full" :src="'/storage/' + user.avatar"
-                :alt="user.first_name" />
+            <div class="flex flex-col items-center space-y-3 w-1/3">
+              <div class="relative h-2/3 w-auto">
+                <ImageUpload v-if="user.id == $page.props.auth.user.id" :current-avatar="user.avatar" />
+                <img v-else-if="user.avatar" class="object-cover w-full h-full rounded-full" :src="'/storage/' + user.avatar"
+                  :alt="user.first_name" />
+                <i v-if="user.email_verified_at"
+                  class="absolute pi pi-verified text-maroon-500 text-2xl md:text-3xl font-semibold bottom-1 right-4 md:right-6 md:bottom-3 bg-white rounded-full">
+                </i>
+              </div>
             </div>
+
             <div class="flex" v-if="user.socials.website">
               <a class="flex items-center space-x-2 mb-2 md:mb-0" :href="user.socials.website" target="_blank">
                 <i class="pi pi-link" style="font-size: 1.2em; color:#a02334;"></i>
@@ -178,38 +180,30 @@ const closeModal = () => {
             </div>
           </div>
         </section>
-        <section class="w-full flex justify-center"
-              v-if="user.id == $page.props.auth.user.id">
+        <section class="w-full flex justify-center" v-if="user.id == $page.props.auth.user.id">
           <div class="w-full flex justify-between items-center py-3 mx-10">
-              <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
-                  <CreatePost
-                      @close="closeCreatePostModal"
-                      :themes="themes"
-                  />
-              </Modal>
-              <button @click="createPost" class="w-full flex justify-between items-center 
+            <Modal maxWidth="2xl" :show="showCreatePostModal" @close="closeCreatePostModal">
+              <CreatePost @close="closeCreatePostModal" :themes="themes" />
+            </Modal>
+            <button @click="createPost" class="w-full flex justify-between items-center 
                   mx-10 md:mx-20 py-5 px-5 bg-maroon-400 rounded-xl hover:bg-maroon-500
                   transition-colors duration-200">
-                  <span class="font-semibold text-white">Create Post</span>
-                  <i class="pi pi-pencil" style="font-size: 1.2em; color: white;"></i>
-              </button>
+              <span class="font-semibold text-white">Create Post</span>
+              <i class="pi pi-pencil" style="font-size: 1.2em; color: white;"></i>
+            </button>
           </div>
         </section>
         <div class="mx-5 md:mx-auto mt-8 w-full">
           <Tabbar :tabs="tabs">
             <template v-slot:tab1>
               <!-- User Posts Section -->
-              <section
-                v-if="posts.data.data.length === 0"
-                class="flex flex-col justify-center mx-10 md:mx-20">
+              <section v-if="posts.data.data.length === 0" class="flex flex-col justify-center mx-10 md:mx-20">
                 <div class="flex flex-col items-center space-y-2">
                   <h1 class="text-2xl font-semibold text-maroon-500">No posts yet</h1>
                   <p class="text-maroon-400">When you create posts, they will appear here.</p>
                 </div>
               </section>
-              <section
-                v-if="posts.data.data.length > 0"  
-                class="flex flex-col justify-center mx-10 md:mx-20">
+              <section v-if="posts.data.data.length > 0" class="flex flex-col justify-center mx-10 md:mx-20">
                 <UserPosts :posts="posts.data.data" />
                 <div class="px-4">
                   <Pagination :first_page_url="posts.data.first_page_url" :from="posts.data.from"

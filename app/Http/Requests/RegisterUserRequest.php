@@ -24,12 +24,6 @@ class RegisterUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = User::withTrashed()
-            ->where('email', $this->email)->first();
-
-        if ($user && $this->handleExpiredVerification($user)) {
-            $user = null;
-        }
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -54,19 +48,5 @@ class RegisterUserRequest extends FormRequest
             'handle.max' => 'The handle may not be greater than 30 characters.',
             'handle.unique' => 'The handle has already been taken.',
         ];
-    }
-
-    private function handleExpiredVerification($user): bool
-    {
-        if ($user->email_verified_at) {
-            return false; // User is already verified, no need to delete.
-        }
-
-        if ($user->created_at->diffInMinutes() > 1) {
-            $user->forceDelete();
-            return true; // Indicate that the user was deleted.
-        }
-
-        return false; // User was not deleted and is still unverified.
     }
 }
