@@ -27,7 +27,7 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
-            <div class="flex w-ful space-x-2">
+            <div class="flex flex-col md:flex-row w-full space-y-2 md:space-y-0 md:space-x-2">
                 <div>
                     <InputLabel for="first_name" value="First Name" />
 
@@ -118,18 +118,23 @@ const submit = () => {
 
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
-
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex justify-end py-2">
                 <Link
                     :href="route('login')"
                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Already registered?
                 </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
+            </div>
+            <div class="flex items-center justify-end">
+                <button 
+                    class="w-full text-center bg-maroon-500 hover:bg-maroon-600 transition-colors duration-200 text-white py-3 rounded-lg" 
+                    :class="{ 'opacity-25 bg-maroon-400': form.processing }" 
+                    :disabled="form.processing">
+                    <i v-show="form.processing" class="animate-spin pi pi-spinner me-1" style="font-size: .9em;"></i>
+                    <span v-if="form.processing">Processing</span>
+                    <span v-else>Register</span>
+                </button>
             </div>
         </form>
     </GuestLayout>

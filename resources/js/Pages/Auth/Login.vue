@@ -46,7 +46,6 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
                     autofocus
                     autocomplete="username"
                 />
@@ -62,21 +61,17 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
                     autocomplete="current-password"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4">
+            <div class="flex justify-between mt-4 ">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
                     <span class="ms-2 text-sm text-gray-600">Remember me</span>
                 </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
@@ -84,10 +79,16 @@ const submit = () => {
                 >
                     Forgot your password?
                 </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
+            </div>
+            <div class="flex items-center mt-4">
+                <button 
+                    class="w-full text-center bg-maroon-500 hover:bg-maroon-600 transition-colors duration-200 text-white py-2 rounded-lg" 
+                    :class="{ 'opacity-25 bg-maroon-400': form.processing }" 
+                    :disabled="form.processing">
+                    <i v-show="form.processing" class="animate-spin pi pi-spinner me-1" style="font-size: .9em;"></i>
+                    <span v-if="form.processing">Logging</span>
+                    <span v-else>Log</span> in
+                </button>
             </div>
         </form>
     </GuestLayout>

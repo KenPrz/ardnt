@@ -22,7 +22,7 @@ provide('themes',props.themes);
             <ViewPost
                 class="bg-white rounded-lg shadow-lg overflow-hidden w-full"
                 :post="post"
-                :originalPost="originalPost"
+                :originalPost="post.originalPost"
             />
         </div>
     </AuthenticatedLayout>
