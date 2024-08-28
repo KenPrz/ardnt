@@ -6,11 +6,17 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-
+import SearchButton from '@/Components/Search/SearchButton.vue';
+import SearchDrawer from '@/Components/Search/SearchDrawer.vue';
 const showingNavigationDropdown = ref(false);
+const showSearch = ref(false);
 </script>
 
 <template>
+    <SearchDrawer 
+      :is-open="showSearch"
+      @close="showSearch = false"
+    />
     <div>
         <div class="min-h-screen bg-yellow-400">
             <nav class="bg-maroon-500 border-b border-maroon-100">
@@ -36,6 +42,9 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <SearchButton 
+                                @toggle-search="showSearch = !showSearch"
+                            />
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">

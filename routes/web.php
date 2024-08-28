@@ -7,6 +7,7 @@ use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ViewUsersController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -60,6 +61,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/comments', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comment', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Search route
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
 });
 
 // Routes with 'auth' middleware only
