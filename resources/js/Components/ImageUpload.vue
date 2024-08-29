@@ -9,8 +9,8 @@ const toast = useToast();
 const props = defineProps({
   currentAvatar: {
     type: String,
-    nullable: true
-  }
+    nullable: true,
+  },
 });
 
 const emit = defineEmits(['update:avatar']);
@@ -20,7 +20,7 @@ const imageUrl = ref(null);
 const cropperRef = ref(null);
 
 const form = useForm({
-  avatar: null
+  avatar: null,
 });
 
 const openModal = () => {
@@ -59,35 +59,37 @@ const uploadImage = () => {
     },
     onError: () => {
       toast.error(form.errors.avatar);
-    }
+    },
   });
 };
 
-watch(() => form.avatar, (newValue) => {
-  if (newValue) {
-    uploadImage();
+watch(
+  () => form.avatar,
+  (newValue) => {
+    if (newValue) {
+      uploadImage();
+    }
   }
-});
+);
 </script>
 
 <template>
   <div>
-    <div class="relative group">
-      
-      <img 
-        :src="currentAvatar ? '/storage/' + currentAvatar : '/public/default-avatar.jpg'"
-        alt="Profile" 
-        class="md:min-w-[15rem] md:min-h-[15rem]
-              md:max-w-[15rem] md:max-h-[15rem]
-              max-w-[10rem] max-h-[10rem]
-              min-w-[10rem] min-h-[10rem]
-              rounded-full object-cover" 
+    <div class="group relative">
+      <img
+        :src="
+          currentAvatar
+            ? '/storage/' + currentAvatar
+            : '/public/default-avatar.jpg'
+        "
+        alt="Profile"
+        class="max-h-[10rem] min-h-[10rem] min-w-[10rem] max-w-[10rem] rounded-full object-cover md:max-h-[15rem] md:min-h-[15rem] md:min-w-[15rem] md:max-w-[15rem]"
       />
 
       <div
-        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+        class="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100"
       >
-        <button @click="openModal" class="text-white font-semibold">
+        <button @click="openModal" class="font-semibold text-white">
           Change Photo
         </button>
       </div>
@@ -95,21 +97,33 @@ watch(() => form.avatar, (newValue) => {
 
     <Modal :show="showModal" @close="closeModal">
       <div class="p-6">
-        <h2 class="text-lg font-semibold mb-4">Update Profile Picture</h2>
-        <input type="file" @change="onFileChange" accept="image/*" class="mb-4" />
+        <h2 class="mb-4 text-lg font-semibold">Update Profile Picture</h2>
+        <input
+          type="file"
+          @change="onFileChange"
+          accept="image/*"
+          class="mb-4"
+        />
         <div v-if="imageUrl" class="mb-4">
           <Cropper
             ref="cropperRef"
             :src="imageUrl"
             :stencil-props="{
-              aspectRatio: 1
+              aspectRatio: 1,
             }"
             class="h-64"
           />
         </div>
         <div class="flex justify-end space-x-2">
-          <button @click="closeModal" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-          <button @click="cropImage" class="px-4 py-2 bg-maroon-500 text-white rounded">Crop & Save</button>
+          <button @click="closeModal" class="rounded bg-gray-200 px-4 py-2">
+            Cancel
+          </button>
+          <button
+            @click="cropImage"
+            class="rounded bg-maroon-500 px-4 py-2 text-white"
+          >
+            Crop & Save
+          </button>
         </div>
       </div>
     </Modal>

@@ -31,12 +31,12 @@ const closeOnEscape = (e) => {
 };
 
 const searchOnEnter = (e) => {
-  if (e.key === 'Enter') {    
+  if (e.key === 'Enter') {
     performFullSearch();
   }
 };
 
-function performFullSearch() {  
+function performFullSearch() {
   if (searchQuery.value.trim() !== '') {
     form.get(route('search.index', searchQuery.value), {
       preserveScroll: true,
@@ -100,37 +100,43 @@ const closeDrawer = () => {
   emit('close');
 };
 
-watch(() => props.isOpen, (newIsOpen) => {
-  if (newIsOpen) {
-    nextTick(() => {
-      searchInput.value?.focus();
-    });
+watch(
+  () => props.isOpen,
+  (newIsOpen) => {
+    if (newIsOpen) {
+      nextTick(() => {
+        searchInput.value?.focus();
+      });
+    }
   }
-});
+);
 </script>
 
 <template>
   <div
-    class="fixed inset-0 overflow-hidden z-50"
+    class="fixed inset-0 z-50 overflow-hidden"
     :class="{ 'pointer-events-none': !isOpen }"
   >
-    <div
-      class="absolute inset-0 overflow-hidden"
-      @click="closeDrawer"
-    >
+    <div class="absolute inset-0 overflow-hidden" @click="closeDrawer">
       <div
         class="absolute inset-0 bg-gray-400 bg-opacity-75 transition-opacity duration-300"
-        :class="{ 'opacity-0': !isOpen, 'opacity-100': isOpen }"
+        :class="{
+          'opacity-0': !isOpen,
+          'opacity-100': isOpen,
+        }"
       ></div>
     </div>
 
-    <div class="fixed inset-y-0 left-0 max-w-full flex">
+    <div class="fixed inset-y-0 left-0 flex max-w-full">
       <div
-        class="w-screen max-w-md transform transition ease-in-out duration-300 bg-white shadow-xl"
-        :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
+        class="w-screen max-w-md transform bg-white shadow-xl transition duration-300 ease-in-out"
+        :class="{
+          '-translate-x-full': !isOpen,
+          'translate-x-0': isOpen,
+        }"
       >
-        <div class="h-full flex flex-col">
-          <div class="px-4 py-6 sm:px-6 bg-gray-50 border-b border-gray-200">
+        <div class="flex h-full flex-col">
+          <div class="border-b border-gray-200 bg-gray-50 px-4 py-6 sm:px-6">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">Search</h2>
               <button
@@ -146,31 +152,38 @@ watch(() => props.isOpen, (newIsOpen) => {
                 v-model="searchQuery"
                 ref="searchInput"
                 placeholder="Search..."
-                class="flex-grow px-4 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-1 focus:ring-maroon-500 focus:border-maroon-500 transition duration-150 ease-in-out"
+                class="flex-grow rounded-l-md border border-gray-300 px-4 py-2 shadow-sm transition duration-150 ease-in-out focus:border-maroon-500 focus:outline-none focus:ring-1 focus:ring-maroon-500"
               />
               <button
                 @click="performFullSearch"
-                class="px-4 py-2 bg-maroon-600 text-white rounded-r-md hover:bg-maroon-700 focus:outline-none focus:ring-maroon-500"
+                class="rounded-r-md bg-maroon-600 px-4 py-2 text-white hover:bg-maroon-700 focus:outline-none focus:ring-maroon-500"
               >
                 Search
               </button>
             </div>
           </div>
           <div class="flex-1 overflow-y-auto">
-            <div v-if="isLoading" class="px-4 sm:px-6 py-4">
+            <div v-if="isLoading" class="px-4 py-4 sm:px-6">
               <p class="text-sm text-gray-500">Searching...</p>
             </div>
-            <div v-else-if="error" class="px-4 sm:px-6 py-4">
-              <p class="text-sm text-red-500">{{ error }}</p>
+            <div v-else-if="error" class="px-4 py-4 sm:px-6">
+              <p class="text-sm text-red-500">
+                {{ error }}
+              </p>
             </div>
-            <div v-else-if="results.users.length > 0 || results.posts.length > 0" class="px-4 sm:px-6">
+            <div
+              v-else-if="results.users.length > 0 || results.posts.length > 0"
+              class="px-4 sm:px-6"
+            >
               <div v-if="results.users.length > 0">
-                <div class="flex justify-between items-center mt-6 mb-3">
+                <div class="mb-3 mt-6 flex items-center justify-between">
                   <h3 class="text-lg font-medium text-gray-900">Users</h3>
                   <button
-                    v-if="searchQuery" 
+                    v-if="searchQuery"
                     @click="performFullSearch"
-                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500">See all
+                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500"
+                  >
+                    See all
                   </button>
                 </div>
                 <ul class="divide-y divide-gray-200">
@@ -186,12 +199,14 @@ watch(() => props.isOpen, (newIsOpen) => {
                 </ul>
               </div>
               <div v-if="results.posts.length > 0">
-                <div class="flex justify-between items-center mt-8 mb-3">
+                <div class="mb-3 mt-8 flex items-center justify-between">
                   <h3 class="text-lg font-medium text-gray-900">Posts</h3>
                   <button
                     v-if="searchQuery"
                     @click="performFullSearch"
-                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500">See all
+                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500"
+                  >
+                    See all
                   </button>
                 </div>
                 <ul class="divide-y divide-gray-200">
@@ -207,7 +222,7 @@ watch(() => props.isOpen, (newIsOpen) => {
                 </ul>
               </div>
             </div>
-            <div v-else-if="searchQuery" class="px-4 sm:px-6 py-4">
+            <div v-else-if="searchQuery" class="px-4 py-4 sm:px-6">
               <p class="text-sm text-gray-500">No results found</p>
             </div>
           </div>

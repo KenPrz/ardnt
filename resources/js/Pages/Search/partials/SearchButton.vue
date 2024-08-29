@@ -1,5 +1,4 @@
 <script setup>
-
 const emit = defineEmits(['toggleSearch']);
 const handleClick = () => {
   emit('toggleSearch');
@@ -9,7 +8,7 @@ const handleClick = () => {
 <template>
   <button
     @click="handleClick"
-    class="p-2 rounded-md text-gray-400 hover:text-white"
+    class="rounded-md p-2 text-gray-400 hover:text-white"
   >
     <i class="pi pi-search"></i>
   </button>
