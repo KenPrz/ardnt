@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { useForm, router } from '@inertiajs/vue3';
 import UserBox from './UserBox.vue';
 import PostCard from './PostCard.vue';
 
@@ -8,6 +9,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+});
+
+const form = useForm({
+  search: '',
 });
 
 const emit = defineEmits(['close']);
@@ -25,12 +30,33 @@ const closeOnEscape = (e) => {
   }
 };
 
+const searchOnEnter = (e) => {
+  if (e.key === 'Enter') {    
+    performFullSearch();
+  }
+};
+
+function performFullSearch() {  
+  if (searchQuery.value.trim() !== '') {
+    form.get(route('search.index', searchQuery.value), {
+      preserveScroll: true,
+      onSuccess: () => {
+        searchQuery.value = '';
+        closeDrawer();
+      },
+    });
+    closeDrawer();
+  }
+}
+
 onMounted(() => {
   document.addEventListener('keydown', closeOnEscape);
+  document.addEventListener('keydown', searchOnEnter);
 });
 
 onUnmounted(() => {
   document.removeEventListener('keydown', closeOnEscape);
+  document.removeEventListener('keydown', searchOnEnter);
 });
 
 const debounce = (callback, delay) => {
@@ -40,7 +66,7 @@ const debounce = (callback, delay) => {
   };
 };
 
-const performSearch = async (query) => {
+const performAsyncSearch = async (query) => {
   if (query.trim() === '') {
     results.value = { users: [], posts: [] };
     return;
@@ -64,7 +90,7 @@ const performSearch = async (query) => {
   }
 };
 
-const debouncedSearch = debounce(performSearch, 300);
+const debouncedSearch = debounce(performAsyncSearch, 300);
 
 watch(searchQuery, (newQuery) => {
   debouncedSearch(newQuery);
@@ -108,20 +134,26 @@ watch(() => props.isOpen, (newIsOpen) => {
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">Search</h2>
               <button
-                class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-maroon-500"
                 @click="closeDrawer"
               >
                 <i class="pi pi-times h-6 w-6"></i>
               </button>
             </div>
-            <div class="mt-6">
+            <div class="mt-6 flex">
               <input
                 type="text"
                 v-model="searchQuery"
                 ref="searchInput"
                 placeholder="Search..."
-                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
+                class="flex-grow px-4 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-1 focus:ring-maroon-500 focus:border-maroon-500 transition duration-150 ease-in-out"
               />
+              <button
+                @click="performFullSearch"
+                class="px-4 py-2 bg-maroon-600 text-white rounded-r-md hover:bg-maroon-700 focus:outline-none focus:ring-maroon-500"
+              >
+                Search
+              </button>
             </div>
           </div>
           <div class="flex-1 overflow-y-auto">
@@ -135,7 +167,11 @@ watch(() => props.isOpen, (newIsOpen) => {
               <div v-if="results.users.length > 0">
                 <div class="flex justify-between items-center mt-6 mb-3">
                   <h3 class="text-lg font-medium text-gray-900">Users</h3>
-                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">See all</a>
+                  <button
+                    v-if="searchQuery" 
+                    @click="performFullSearch"
+                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500">See all
+                  </button>
                 </div>
                 <ul class="divide-y divide-gray-200">
                   <li v-for="user in results.users" :key="user.id" class="py-4">
@@ -152,7 +188,11 @@ watch(() => props.isOpen, (newIsOpen) => {
               <div v-if="results.posts.length > 0">
                 <div class="flex justify-between items-center mt-8 mb-3">
                   <h3 class="text-lg font-medium text-gray-900">Posts</h3>
-                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">See all</a>
+                  <button
+                    v-if="searchQuery"
+                    @click="performFullSearch"
+                    class="text-sm font-medium text-maroon-600 hover:text-maroon-500">See all
+                  </button>
                 </div>
                 <ul class="divide-y divide-gray-200">
                   <li v-for="post in results.posts" :key="post.id" class="py-4">

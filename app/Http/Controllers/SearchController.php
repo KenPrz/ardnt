@@ -11,16 +11,26 @@ class SearchController extends Controller
     /**
      * Display the search results on search page.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $search The search term to filter users and posts by.
      * @return \Inertia\Response
      */
-    public function index(Request $request) {
-        $search = $request->search;
-        $users = $this->searchUsers($search, 10);
-        $posts = $this->searchPosts($search, 10);
+    public function index(Request $request, string $search)
+    {
+        if($search == null || $search == '') {
+            return redirect()->route('feed');
+        }
+
+        $users = $this->searchUsers($search, 5);
+        $posts = $this->searchPosts($search, 5);
+        
+        if ($request->wantsJson()) {
+            return response()->json($users);
+        }
+
         return Inertia::render('Search/Search', [
             'users' => $users,
             'posts' => $posts,
+            'search'=> $search,
         ]);
     }
     /**
@@ -50,7 +60,7 @@ class SearchController extends Controller
      */
     protected function searchUsers($search, $limit=null)
     {
-        $query = User::select('id', 'first_name', 'last_name', 'handle', 'avatar', 'created_at')
+        $query = User::select('id', 'first_name', 'last_name', 'handle', 'avatar', 'created_at','quote')
             ->where(function ($query) use ($search) {
                 $query->where('first_name', 'like', "%$search%")
                       ->orWhere('last_name', 'like', "%$search%")

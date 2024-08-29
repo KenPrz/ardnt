@@ -63,7 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/comment', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Search route
-    Route::get('/search', [SearchController::class, 'search'])->name('search');
+    Route::get('/search-query', [SearchController::class, 'search'])->name('search');
+    Route::get('/search/{query}', [SearchController::class, 'index'])->name('search.index');
 });
 
 // Routes with 'auth' middleware only

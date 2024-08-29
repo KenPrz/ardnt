@@ -47,11 +47,16 @@ function toggleComments() {
         <!-- Post Content -->
         <div class="p-4">
             <!-- Title -->
-            <h2 class="text-2xl font-customSerif font-semibold text-maroon-600 mb-2">
+            <h2 class="text-2xl font-customSerif font-semibold text-maroon-600">
                 {{ post.title }}
             </h2>
+            <a 
+                :href="route('search.index',post.theme.name)"
+                class="font-thin italic text-sm mb-3 hover:underline">
+                #{{ post.theme.name }}
+            </a>
             <!-- Post Meta -->
-            <div class="flex items-center text-sm text-gray-500 mb-4">
+            <div class="flex items-center text-sm text-gray-500 mb-3 mt-2">
                 <a :href="route('users.show', post.user.handle)" class="hover:underline">
                     <span>@{{ post.user.handle }}</span>
                 </a>
