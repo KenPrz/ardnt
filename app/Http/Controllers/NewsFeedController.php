@@ -40,6 +40,7 @@ class NewsFeedController extends Controller
             // Case: User has a regular number of followers
             $posts = $this->getAllPosts($followerIds);
         }
+
         return Inertia::render('Feed/NewsFeed', [
             'posts' => $posts,
             'followRecommendations' => $this->getRecommendedFollowers($user->id),

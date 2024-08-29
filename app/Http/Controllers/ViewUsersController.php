@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
 use App\Models\Theme;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Inertia\Inertia;
 
@@ -55,8 +55,8 @@ class ViewUsersController extends Controller
                 'count' => $user->following->count(),
                 'data' => $following,
             ],
-            'themes' => $user->id == auth()->user()->id 
-                ? Theme::all() 
+            'themes' => $user->id == auth()->user()->id
+                ? Theme::all()
                 : null,
         ]);
     }

@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'handle' => $request->handle,
             'password' => Hash::make($request->password),
         ]);
-        
+
         event(new Registered($user));
         Auth::login($user);
 
@@ -55,8 +55,8 @@ class RegisteredUserController extends Controller
      * returns true indicating that the user was deleted. Otherwise, it returns false indicating
      * that the user was not deleted and is still unverified.
      *
-     * @param  User  $user The user object.
-     * @return bool       True if the user was deleted, false otherwise.
+     * @param  User  $user  The user object.
+     * @return bool True if the user was deleted, false otherwise.
      */
     private function handleExpiredVerification($user): bool
     {
@@ -66,10 +66,10 @@ class RegisteredUserController extends Controller
 
         if ($user->created_at->diffInMinutes() > 1) {
             $user->delete();
+
             return true; // Indicate that the user was deleted.
         }
 
         return false; // User was not deleted and is still unverified.
     }
-
 }

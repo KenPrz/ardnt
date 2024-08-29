@@ -2,9 +2,10 @@
 
 namespace App\Rules;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use App\Models\User;
+
 class UniqueIfNotVerified implements ValidationRule
 {
     /**

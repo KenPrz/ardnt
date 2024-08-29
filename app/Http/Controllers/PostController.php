@@ -12,26 +12,24 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-
     /**
      * Store a newly created post in the database.
      *
-     * @param  \App\Http\Requests\PostCreationRequest  $request
      * @return void
      */
     public function store(PostCreationRequest $request)
     {
-        
+
         Post::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
             'content' => $request->content,
             'theme_id' => $request->theme,
             'cover_image' => $request->cover_image == null
-                ? null 
+                ? null
                 : $request->file('cover_image')
-                    ->store('images', $request->is_public 
-                        ? 'public' 
+                    ->store('images', $request->is_public
+                        ? 'public'
                         : 'private'
                     ),
             'is_public' => $request->is_public,
@@ -50,9 +48,10 @@ class PostController extends Controller
     {
         $post = Post::withRelationsAndCounts()
             ->findOrFail($id);
+
         return Inertia::render('Post/PreviewPost', [
             'post' => $post,
-            'themes'=>Theme::all(),
+            'themes' => Theme::all(),
         ]);
     }
 
@@ -74,9 +73,9 @@ class PostController extends Controller
             'id' => 'required|exists:posts,id',
         ]);
         $post = Post::findOrFail($request->id);
-        if($post->user_id == auth()->id()){
+        if ($post->user_id == auth()->id()) {
             $post->delete();
-        }else{
+        } else {
             abort(403);
         }
     }

@@ -23,16 +23,16 @@ class PostFactory extends Factory
         $num_of_posts = Post::count();
         $num_of_themes = Theme::count();
         $images = [
-            'images/img1.png', 
-            'images/img2.png', 
-            'images/img3.png', 
-            'images/img4.png', 
-            'images/img5.png', 
-            'images/img6.png', 
-            'images/img7.png', 
-            'images/img8.png'
+            'images/img1.png',
+            'images/img2.png',
+            'images/img3.png',
+            'images/img4.png',
+            'images/img5.png',
+            'images/img6.png',
+            'images/img7.png',
+            'images/img8.png',
         ];
-        
+
         $is_a_shared_post = $this->faker->boolean(50);
         $this_post_has_img = $this->faker->boolean(50);
         $htmlContents = [
@@ -44,6 +44,7 @@ class PostFactory extends Factory
             '<p>The first paragraph introduces the topic of <strong>web development</strong> and its relevance in today\'s tech world.</p><p>The second paragraph describes how it is an <em>exciting</em> field filled with opportunities and innovations.</p><p>In the third paragraph, we discuss the importance of staying updated with <s>outdated</s> new technologies to remain competitive.</p>',
             '<p>Opening statement: Here\'s an intriguing <strong>fact</strong> about human behavior.</p><p>In the following details, did you know that the average person spends <em>up to six months</em> of their life waiting for traffic lights to change?</p><p>This fascinating statistic sheds light on how we experience time in our daily lives.</p>',
         ];
+
         return [
             'user_id' => $this->faker->numberBetween(1, $num_of_users),
             'title' => $is_a_shared_post ? null : $this->faker->sentence(3),
@@ -51,9 +52,9 @@ class PostFactory extends Factory
             'theme_id' => rand(1, $num_of_themes),
             'is_public' => $this->faker->boolean(50),
             'cover_image' => $is_a_shared_post
-                ? null 
-                : ($this_post_has_img 
-                    ? $this->faker->randomElement($images) 
+                ? null
+                : ($this_post_has_img
+                    ? $this->faker->randomElement($images)
                     : null),
             'is_shared' => $is_a_shared_post,
             'shared_post_id' => $is_a_shared_post && $num_of_posts > 0

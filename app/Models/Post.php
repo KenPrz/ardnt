@@ -126,7 +126,7 @@ class Post extends Model
                 $query->select('users.id', 'users.first_name', 'users.last_name', 'users.avatar', 'users.handle');
             },
             'originalPost' => function ($query) {
-                $query->select('id', 'title', 'content', 'theme_id', 'cover_image', 'is_public', 'user_id', 'is_shared','created_at', 'updated_at')
+                $query->select('id', 'title', 'content', 'theme_id', 'cover_image', 'is_public', 'user_id', 'is_shared', 'created_at', 'updated_at')
                     ->with([
                         'user' => function ($query) {
                             $query->select('id', 'handle', 'avatar');
@@ -138,28 +138,27 @@ class Post extends Model
             },
             'shares' => function ($query) {
                 $query->select(
-                    'id', 
-                    'title', 
-                    'content', 
-                    'theme_id', 
-                    'cover_image', 
-                    'is_public', 
-                    'user_id', 
-                    'is_shared', 
+                    'id',
+                    'title',
+                    'content',
+                    'theme_id',
+                    'cover_image',
+                    'is_public',
+                    'user_id',
+                    'is_shared',
                     'shared_post_id'
                 )
-                ->with([
-                    'theme' => function ($query) {
-                        $query->select('id', 'name');
-                    },
-                    'user' => function ($query) {
-                        $query->select('id', 'first_name', 'last_name', 'avatar', 'handle');
-                    },
-                ]);
-            }
+                    ->with([
+                        'theme' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'user' => function ($query) {
+                            $query->select('id', 'first_name', 'last_name', 'avatar', 'handle');
+                        },
+                    ]);
+            },
         ])
-        ->withCount(['comments', 'likedByUsers'])
-        ->latest('created_at');
+            ->withCount(['comments', 'likedByUsers'])
+            ->latest('created_at');
     }
-
 }

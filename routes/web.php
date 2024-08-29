@@ -6,8 +6,8 @@ use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ViewUsersController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ViewUsersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,10 +34,10 @@ Route::get('/', function () {
 
 // Routes with 'auth' and 'verified' middleware
 Route::middleware(['auth', 'verified'])->group(function () {
-    
+
     // Dashboard route
     Route::get('/feed', [NewsFeedController::class, 'index'])->name('dashboard');
-    
+
     // Post Like/Unlike routes
     Route::post('/like-post', [LikePostController::class, 'like'])->name('post.like');
     Route::delete('/unlike-post', [LikePostController::class, 'unlike'])->name('post.unlike');
@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Follow/Unfollow User routes
     Route::post('/follow-user', [FollowUserController::class, 'follow'])->name('user.follow');
     Route::delete('/unfollow-user', [FollowUserController::class, 'unfollow'])->name('user.unfollow');
-    
+
     // Post routes
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::post('/posts/share-post', [PostController::class, 'sharePost'])->name('posts.share');
@@ -69,7 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Routes with 'auth' middleware only
 Route::middleware('auth')->group(function () {
-    
+
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -77,6 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/socials', [ProfileController::class, 'updateSocials'])->name('profile.update.socials');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 require __DIR__.'/auth.php';
