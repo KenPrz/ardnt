@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -8,8 +8,24 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import SearchButton from '@/Components/Search/SearchButton.vue';
 import SearchDrawer from '@/Components/Search/SearchDrawer.vue';
+
 const showingNavigationDropdown = ref(false);
 const showSearch = ref(false);
+
+const handleKeyDown = (event) => {
+    if (event.ctrlKey && event.key === 'k') {
+        event.preventDefault();
+        showSearch.value = !showSearch.value;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleKeyDown);
+});
 </script>
 
 <template>
@@ -116,33 +132,33 @@ const showSearch = ref(false);
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                    <div
-                        :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                        class="sm:hidden"
-                    >
-                        <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Feed
-                        </ResponsiveNavLink>
-                        </div>
-
-                        <!-- Responsive Settings Options -->
-                        <div class="pt-4 pb-1 border-t border-maroon-400">
-                        <div class="px-4">
-                            <div class="font-medium text-base text-white">
-                            {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="font-medium text-sm text-gray-200">{{ $page.props.auth.user.email }}</div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                            Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                        </div>
+                <div
+                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+                    class="sm:hidden"
+                >
+                    <div class="pt-2 pb-3 space-y-1">
+                    <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        Feed
+                    </ResponsiveNavLink>
                     </div>
+
+                    <!-- Responsive Settings Options -->
+                    <div class="pt-4 pb-1 border-t border-maroon-400">
+                    <div class="px-4">
+                        <div class="font-medium text-base text-white">
+                        {{ $page.props.auth.user.name }}
+                        </div>
+                        <div class="font-medium text-sm text-gray-200">{{ $page.props.auth.user.email }}</div>
+                    </div>
+
+                    <div class="mt-3 space-y-1">
+                        <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                        Log Out
+                        </ResponsiveNavLink>
+                    </div>
+                    </div>
+                </div>
             </nav>
 
             <!-- Page Heading -->

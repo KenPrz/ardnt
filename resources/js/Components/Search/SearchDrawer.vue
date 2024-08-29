@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import UserBox from './UserBox.vue';
 import PostCard from './PostCard.vue';
 
@@ -17,6 +17,21 @@ const results = ref({ users: [], posts: [] });
 const isLoading = ref(false);
 const error = ref(null);
 let debounceTimer = null;
+const searchInput = ref(null);
+
+const closeOnEscape = (e) => {
+  if (e.key === 'Escape' && props.isOpen) {
+    closeDrawer();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('keydown', closeOnEscape);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', closeOnEscape);
+});
 
 const debounce = (callback, delay) => {
   return (...args) => {
@@ -35,15 +50,12 @@ const performSearch = async (query) => {
   error.value = null;
 
   try {
-    // Use Ziggy's route() function to generate the URL
     const response = await fetch(route('search', { search: query }));
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
     results.value = data;
-    console.log(data);
-    
   } catch (err) {
     console.error('Search error:', err);
     error.value = 'An error occurred while searching. Please try again.';
@@ -61,6 +73,14 @@ watch(searchQuery, (newQuery) => {
 const closeDrawer = () => {
   emit('close');
 };
+
+watch(() => props.isOpen, (newIsOpen) => {
+  if (newIsOpen) {
+    nextTick(() => {
+      searchInput.value?.focus();
+    });
+  }
+});
 </script>
 
 <template>
@@ -73,33 +93,34 @@ const closeDrawer = () => {
       @click="closeDrawer"
     >
       <div
-        class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        class="absolute inset-0 bg-gray-400 bg-opacity-75 transition-opacity duration-300"
         :class="{ 'opacity-0': !isOpen, 'opacity-100': isOpen }"
       ></div>
     </div>
 
     <div class="fixed inset-y-0 left-0 max-w-full flex">
       <div
-        class="w-screen max-w-md transform transition ease-in-out duration-300"
+        class="w-screen max-w-md transform transition ease-in-out duration-300 bg-white shadow-xl"
         :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
       >
-        <div class="h-full flex flex-col bg-white shadow-xl">
-          <div class="px-4 py-6 sm:px-6">
-            <div class="flex items-start justify-between">
-              <h2 class="text-lg font-medium text-gray-900">Search</h2>
+        <div class="h-full flex flex-col">
+          <div class="px-4 py-6 sm:px-6 bg-gray-50 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+              <h2 class="text-xl font-semibold text-gray-900">Search</h2>
               <button
-                class="ml-3 text-gray-400 hover:text-gray-500"
+                class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 @click="closeDrawer"
               >
-                Close
+                <i class="pi pi-times h-6 w-6"></i>
               </button>
             </div>
             <div class="mt-6">
               <input
                 type="text"
                 v-model="searchQuery"
+                ref="searchInput"
                 placeholder="Search..."
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
               />
             </div>
           </div>
@@ -112,9 +133,12 @@ const closeDrawer = () => {
             </div>
             <div v-else-if="results.users.length > 0 || results.posts.length > 0" class="px-4 sm:px-6">
               <div v-if="results.users.length > 0">
-                <h3 class="text-sm font-medium text-gray-500 mt-4">Users</h3>
-                <ul class="mt-2 divide-y divide-gray-200">
-                  <li v-for="user in results.users" :key="user.id" class="py-3">
+                <div class="flex justify-between items-center mt-6 mb-3">
+                  <h3 class="text-lg font-medium text-gray-900">Users</h3>
+                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">See all</a>
+                </div>
+                <ul class="divide-y divide-gray-200">
+                  <li v-for="user in results.users" :key="user.id" class="py-4">
                     <UserBox
                       :id="user.id"
                       :first_name="user.first_name"
@@ -126,9 +150,12 @@ const closeDrawer = () => {
                 </ul>
               </div>
               <div v-if="results.posts.length > 0">
-                <h3 class="text-sm font-medium text-gray-500 mt-4">Posts</h3>
-                <ul class="mt-2 divide-y divide-gray-200">
-                  <li v-for="post in results.posts" :key="post.id" class="py-3">
+                <div class="flex justify-between items-center mt-8 mb-3">
+                  <h3 class="text-lg font-medium text-gray-900">Posts</h3>
+                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">See all</a>
+                </div>
+                <ul class="divide-y divide-gray-200">
+                  <li v-for="post in results.posts" :key="post.id" class="py-4">
                     <PostCard
                       :id="post.id"
                       :title="post.title"

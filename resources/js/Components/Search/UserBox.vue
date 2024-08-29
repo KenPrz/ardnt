@@ -18,7 +18,7 @@
         },
         avatar: {
             type: String,
-            required: true,
+            nullable: true,
         },
     })
 </script>

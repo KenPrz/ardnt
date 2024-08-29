@@ -111,10 +111,8 @@ function closeSharePostModal() {
                         <i class="pi pi-comment" style="font-size: 1.2em;"></i>
                         <span>{{ post.comments_count }}</span>
                     </button>
-                    
                     <!-- Share Button -->
                     <button 
-                        v-if="post.original_post"
                         @click="sharePost(post)" 
                         class="text-gray-500 text-sm flex items-center">
                             <i class="pi pi-share-alt" style="font-size: 1.2em;"></i>
