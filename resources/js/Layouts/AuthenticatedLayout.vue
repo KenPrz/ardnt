@@ -6,8 +6,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import SearchButton from '@/Components/Search/SearchButton.vue';
-import SearchDrawer from '@/Components/Search/SearchDrawer.vue';
+import SearchButton from '@/Pages/Search/partials/SearchButton.vue';
+import SearchDrawer from '@/Pages/Search/partials/SearchDrawer.vue';
 
 const showingNavigationDropdown = ref(false);
 const showSearch = ref(false);
