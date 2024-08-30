@@ -1,6 +1,6 @@
 # Microblog Docker Setup
 
-This README provides instructions for setting up and running the microblog app using Docker.
+This README provides instructions for setting up and running the Microblog application using Docker.
 
 ## Getting Started
 
@@ -10,66 +10,25 @@ This README provides instructions for setting up and running the microblog app u
    cd microblog
    ```
 
-2. Copy the `.env` file:
+2. Make the setup script executable:
    ```
-   cp .env.example .env
-   ```
-
-3. Install Composer dependencies:
-   ```
-   docker run --rm \
-   -u "$(id -u):$(id -g)" \
-   -v "$(pwd):/var/www/html" \
-   -w /var/www/html \
-   laravelsail/php83-composer:latest \
-   composer install --ignore-platform-reqs
+   chmod +x setup.sh
    ```
 
-4. Start the Docker containers:
+3. Run the setup script:
    ```
-   ./vendor/bin/sail up
+   ./setup.sh
    ```
 
-## Configuring a Shell Alias
+   This script will:
+   - Install Composer dependencies
+   - Start the Docker containers
+   - Install NPM dependencies
+   - Generate the application key
+   - Run database migrations and seed the database
+   - Compile assets
+   - Run node
 
-To make it easier to run Sail commands, you can set up an alias:
+4. Access your application at `http://localhost`
 
-```
-alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
-```
-
-After setting up the alias, you can use:
-
-```
-sail up
-```
-
-to start your application.
-
-## Additional Commands
-
-- To stop the containers:
-  ```
-  sail down
-  ```
-
-- To run artisan commands:
-  ```
-  sail artisan [command]
-  ```
-
-- To run npm commands:
-  ```
-  sail npm [command]
-  ```
-
-Remember to run `sail artisan key:generate` to set the application key if you haven't already.
-
-## Troubleshooting
-
-If you encounter any issues, ensure that:
-- Docker is installed and running on your system
-- All required ports are available (typically 80, 3306, and others as specified in the docker-compose.yml)
-- You have the necessary permissions to run Docker commands
-
-For more information, refer to the [Laravel Sail documentation](https://laravel.com/docs/sail).
+... (rest of the README remains the same)
