@@ -17,6 +17,7 @@ RUN composer install \
     php artisan key:generate \
     php artisan config:clear \
     php artisan cache:clear \
+    # Execute the ff (will fix soon this weekend)
     # docker-compose exec web bash
     # php artisan migrate:fresh --seed
 # Install Node.js and npm
