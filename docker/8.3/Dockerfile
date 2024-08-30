@@ -51,13 +51,32 @@ RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.3
 ARG WWWGROUP=${WWWGROUP:-1000}
 ARG WWWUSER=${WWWUSER:-1000}
 
-RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u $WWWUSER sail
+RUN groupadd --force -g ${WWWGROUP} sail
+RUN useradd -ms /bin/bash --no-user-group -g ${WWWGROUP} -u ${WWWUSER} sail
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
+
+# Copy application files
+COPY --chown=sail:sail . /var/www/html
+
+# Switch to non-root user
+USER sail
+
+
+# Install Composer dependencies
+RUN composer install --no-interaction --no-progress --prefer-dist
+
+# Run migrations with seed
+RUN php artisan migrate:fresh --seed
+
+# Install NPM dependencies
+RUN npm install
+
+# Run node dev
+RUN npm run dev
 
 EXPOSE 80
 
