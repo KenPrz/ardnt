@@ -18,18 +18,18 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $avatars = [
-            'avatars/pfp0.jpeg',
-            'avatars/pfp1.jpeg',
-            'avatars/pfp2.jpeg',
-            'avatars/pfp3.jpeg',
-            'avatars/pfp4.jpeg',
-            'avatars/pfp5.jpeg',
-            'avatars/pfp6.jpeg',
-            'avatars/pfp7.jpeg',
-            'avatars/pfp8.jpeg',
-            'avatars/pfp9.jpeg',
-            'avatars/pfp10.jpeg',
-            'avatars/pfp11.jpeg',
+            'avatars/pfp0.jpg',
+            'avatars/pfp1.jpg',
+            'avatars/pfp2.jpg',
+            'avatars/pfp3.jpg',
+            'avatars/pfp4.jpg',
+            'avatars/pfp5.jpg',
+            'avatars/pfp6.jpg',
+            'avatars/pfp7.jpg',
+            'avatars/pfp8.jpg',
+            'avatars/pfp9.jpg',
+            'avatars/pfp10.jpg',
+            'avatars/pfp11.jpg',
         ];
 
         return [
