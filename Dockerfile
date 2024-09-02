@@ -23,22 +23,31 @@ RUN a2enmod rewrite
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 # Copy existing application directory contents
-COPY . /var/www/html
+COPY . /var/www
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www
+RUN chmod -R 755 /var/www/storage
 
 # Install application dependencies
-RUN composer install
+RUN composer install --no-interaction --no-plugins --no-scripts
 
 # Install Node.js dependencies
 RUN npm install
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www/html
+RUN npm run build
+
+# generate key
+RUN php artisan key:generate
+
+# link storage
+RUN php artisan storage:link
 
 # Change DocumentRoot to public directory
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf
 
 # Change current user to www-data
 USER www-data
