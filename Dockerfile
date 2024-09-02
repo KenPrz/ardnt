@@ -1,8 +1,16 @@
 FROM php:8.3-apache
 
+# Copy Composer into the container
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-ARG PHP_MODE
+# Set PHP mode and configure Apache
+ARG PHP_MODE=production
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy Laravel project files
+COPY . .
 
 RUN mv "$PHP_INI_DIR/php.ini-$PHP_MODE" "$PHP_INI_DIR/php.ini" && \
     sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf && \
@@ -12,18 +20,12 @@ RUN mv "$PHP_INI_DIR/php.ini-$PHP_MODE" "$PHP_INI_DIR/php.ini" && \
     docker-php-ext-install bcmath pdo_mysql && \
     a2enmod rewrite
 
+# Install dependencies and run Laravel artisan commands
+RUN composer install && \
+    php artisan key:generate && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan storage:link
 
-RUN composer install \
-    php artisan key:generate \
-    php artisan config:clear \
-    php artisan cache:clear \
-    # Execute the ff (will fix soon this weekend)
-    # docker-compose exec web bash
-    # php artisan migrate:fresh --seed
-# Install Node.js and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
-# Set working directory
-WORKDIR /var/www/html
 # Expose the port for php artisan serve
 EXPOSE 8000
