@@ -1,29 +1,48 @@
+# Use PHP 8.3 Apache as the base image
 FROM php:8.3-apache
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    nodejs \
+    npm
 
-ARG PHP_MODE
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-RUN mv "$PHP_INI_DIR/php.ini-$PHP_MODE" "$PHP_INI_DIR/php.ini" && \
-    sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf && \
-    sed -ri -e 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
-    apt-get update -y && \
-    apt-get install -y unzip && \
-    docker-php-ext-install bcmath pdo_mysql && \
-    a2enmod rewrite
+# Enable Apache modules
+RUN a2enmod rewrite
 
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN composer install \
-    php artisan key:generate \
-    php artisan config:clear \
-    php artisan cache:clear \
-    # Execute the ff (will fix soon this weekend)
-    # docker-compose exec web bash
-    # php artisan migrate:fresh --seed
-# Install Node.js and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
 # Set working directory
 WORKDIR /var/www/html
-# Expose the port for php artisan serve
-EXPOSE 8000
+
+# Copy existing application directory contents
+COPY . /var/www/html
+
+# Install application dependencies
+RUN composer install
+
+# Install Node.js dependencies
+RUN npm install
+
+# Copy existing application directory permissions
+COPY --chown=www-data:www-data . /var/www/html
+
+# Change DocumentRoot to public directory
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+
+# Change current user to www-data
+USER www-data
+
+# Expose port 80 and start apache server
+EXPOSE 80
+CMD ["apache2-foreground"]
