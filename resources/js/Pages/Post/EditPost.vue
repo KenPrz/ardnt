@@ -25,7 +25,7 @@ const form = useForm({
   id: props.post.id,
   title: props.post.title,
   content: props.post.content,
-  theme: props.post.theme.id,
+  theme: props.post.theme_id ?? null,
   cover_image: props.post.cover_image,
   is_public: props.post.is_public,
   is_shared: props.post.is_shared,
@@ -115,6 +115,11 @@ function deletePost() {
             class="w-full rounded-lg border border-gray-300 p-2"
           >
             <option value="" disabled>Select a theme</option>
+            <option
+              :value="null"
+              >
+              None
+            </option>
             <option v-for="theme in themes" :key="theme.id" :value="theme.id">
               {{ theme.name }}
             </option>

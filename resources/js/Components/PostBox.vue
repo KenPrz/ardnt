@@ -69,7 +69,7 @@ function closeSharePostModal() {
           {{ post.title }}
         </h2>
         <!-- Theme -->
-        <a 
+        <a v-if="post.theme"
           :href="route('search.index', post.theme.name)"
           class="text-sm text-gray-600 hover:underline">#{{ post.theme.name }}</a>
       </div>

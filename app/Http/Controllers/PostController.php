@@ -61,7 +61,13 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request)
     {
         $post = Post::findOrFail($request->id);
-        $post->fill($request->validated())->save();
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->theme_id = $request->theme;
+        $post->is_public = $request->is_public;
+        $post->is_shared = $request->is_shared;
+        $post->shared_post_id = null;
+        $post->save();
     }
 
     /**
