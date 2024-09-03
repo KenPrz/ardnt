@@ -94,7 +94,7 @@ const form = useForm({
       </div>
 
       <div>
-        <InputLabel for="handle" value="Handle" />
+        <InputLabel for="handle" value="Username" />
         <TextInput
           id="handle"
           type="text"

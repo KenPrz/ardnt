@@ -117,6 +117,11 @@ function submitPost() {
               class="rounded-lg border border-gray-300"
             >
               <option value="" disabled>Select a theme</option>
+              <option
+                  :value="null"
+                >
+                  None
+              </option>
               <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                 {{ theme.name }}
               </option>

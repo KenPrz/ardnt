@@ -26,7 +26,7 @@ class PostUpdateRequest extends FormRequest
             'id' => 'required|numeric|exists:posts,id',
             'title' => 'required|string|max:64|min:5',
             'content' => ['required', 'string', 'max:5000', 'min:5', new PostContentRule],
-            'theme' => 'required|numeric|exists:themes,id',
+            'theme' => 'nullable|numeric|exists:themes,id',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'is_public' => 'required|boolean',
             'is_shared' => 'required|boolean',

@@ -87,6 +87,11 @@ function sharePost() {
               >
                 <option value="" disabled>Select a theme</option>
                 <option
+                  :value="null"
+                >
+                  None
+                </option>
+                <option
                   v-for="theme in themes"
                   :key="theme.id"
                   :value="theme.id"

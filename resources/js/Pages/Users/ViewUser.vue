@@ -138,7 +138,7 @@ const closeModal = () => {
           </div>
           <div class="flex w-2/3 flex-col justify-center md:justify-start">
             <h1
-              class="text-center font-customSerif text-4xl text-maroon-500 md:text-start md:text-6xl"
+              class="truncate text-center font-customSerif text-4xl text-maroon-500 md:text-start md:text-6xl"
             >
               {{ user.first_name + ' ' + user.last_name }}
             </h1>
@@ -155,11 +155,6 @@ const closeModal = () => {
                 class="text-md text-center text-sm italic text-gray-700 md:text-start md:text-lg"
               >
                 "{{ user.quote }}"
-                <span v-if="user.id == $page.props.auth.user.id">
-                  <button>
-                    <i class="pi pi-pencil" style="font-size: 0.8em"></i>
-                  </button>
-                </span>
               </p>
             </div>
             <div
