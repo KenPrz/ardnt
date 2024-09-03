@@ -19,7 +19,6 @@ class PostController extends Controller
      */
     public function store(PostCreationRequest $request)
     {
-
         Post::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
@@ -63,7 +62,7 @@ class PostController extends Controller
         $post->theme_id = $request->theme;
         $post->is_public = $request->is_public;
         $post->is_shared = $request->is_shared;
-        $post->shared_post_id = null;
+        $post->shared_post_id = $request->shared_post_id ?? null;
         $post->save();
     }
 

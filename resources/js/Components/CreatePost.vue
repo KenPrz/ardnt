@@ -99,6 +99,7 @@ function submitPost() {
       <div class="py-2">
         <label for="title">Title</label>
         <TextInput class="w-full" v-model="form.title" label="Title" />
+        <InputError :message="form.errors.title" />
       </div>
       <Editor v-model="blogContent">
         <div class="mb-3 flex items-center justify-center space-x-4">

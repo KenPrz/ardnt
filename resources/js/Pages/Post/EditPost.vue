@@ -33,7 +33,7 @@ const form = useForm({
 });
 
 function updatePost() {
-  form.put(route('posts.update'), {
+  form.put(route('posts.update', form.id), {
     preserveScroll: true,
     onSuccess: () => {
       toast.success('Post updated successfully');
@@ -48,7 +48,7 @@ function updatePost() {
 }
 
 function deletePost() {
-  form.delete(route('posts.destroy'), {
+  form.delete(route('posts.destroy', form.id), {
     preserveScroll: true,
     onSuccess: () => {
       toast.success('Post deleted successfully');
@@ -88,6 +88,7 @@ function deletePost() {
           :errors="form.errors.title"
           class="w-full"
         />
+        <InputError :message="form.errors.title" />
       </div>
       <!-- Post Meta -->
       <div class="mb-4 text-sm text-gray-500">
@@ -102,6 +103,7 @@ function deletePost() {
           />
           <span>{{ form.is_public ? 'Public' : 'Private' }}</span>
         </div>
+        <InputError :message="form.errors.is_public" />
         <div>
           <label
             for="theme"
@@ -115,11 +117,7 @@ function deletePost() {
             class="w-full rounded-lg border border-gray-300 p-2"
           >
             <option value="" disabled>Select a theme</option>
-            <option
-              :value="null"
-              >
-              None
-            </option>
+            <option :value="null">None</option>
             <option v-for="theme in themes" :key="theme.id" :value="theme.id">
               {{ theme.name }}
             </option>
@@ -195,7 +193,7 @@ function deletePost() {
             Cancel
           </button>
           <button
-            @click="deletePost"
+            @click="deletePost, emit('close')"
             class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
           >
             Delete

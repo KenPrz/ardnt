@@ -172,6 +172,7 @@ function closeSharePostModal() {
           : post
       "
       :user="$page.props.auth.user"
+      @close="closeSharePostModal"
     />
   </Modal>
 </template>

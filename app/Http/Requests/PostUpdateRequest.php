@@ -24,10 +24,10 @@ class PostUpdateRequest extends FormRequest
     {
         return [
             'id' => 'required|numeric|exists:posts,id',
-            'title' => 'required|string|max:64|min:5',
+            'title' => $this->is_shared ? 'nullable|string|max:64|min:5' : 'required|string|max:64|min:5',
             'content' => ['required', 'string', 'max:5000', 'min:5', new PostContentRule],
             'theme' => 'nullable|numeric|exists:themes,id',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'cover_image' => 'nullable|string',
             'is_public' => 'required|boolean',
             'is_shared' => 'required|boolean',
             'shared_post_id' => ['nullable', 'numeric', 'exists:posts,id'],

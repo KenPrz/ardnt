@@ -43,6 +43,10 @@ RUN npm run build
 # Change DocumentRoot to public directory
 RUN sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf
 
+# Set PHP configurations for file upload
+RUN echo "upload_max_filesize = 5M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 5M" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Set up entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
