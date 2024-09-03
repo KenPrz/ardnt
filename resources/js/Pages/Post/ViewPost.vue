@@ -50,6 +50,7 @@ function toggleComments() {
         {{ post.title }}
       </h2>
       <a
+        v-if="post.theme"
         :href="route('search.index', post.theme.name)"
         class="mb-3 text-sm font-thin italic hover:underline"
       >
