@@ -9,7 +9,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www
+      - /var/www/vendor
+      - /var/www/node_modules
     networks:
       - app-network
     depends_on:
@@ -47,7 +49,6 @@ services:
       - app-network
     depends_on:
       - mysql
-
   mailpit:
     image: axllent/mailpit
     container_name: laravel-mailpit

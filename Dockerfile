@@ -40,18 +40,18 @@ RUN npm install
 
 RUN npm run build
 
-# generate key
-RUN php artisan key:generate
-
-# link storage
-RUN php artisan storage:link
-
 # Change DocumentRoot to public directory
 RUN sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf
 
-# Change current user to www-data
-USER www-data
+# Set up entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose port 80 and start apache server
+# Expose port 80
 EXPOSE 80
+
+# Use the entrypoint script
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# Start apache server
 CMD ["apache2-foreground"]
