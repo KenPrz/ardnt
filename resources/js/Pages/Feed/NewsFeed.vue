@@ -1,12 +1,13 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { ref, provide } from 'vue';
+import { ref, provide, watch, onMounted, onUnmounted } from 'vue';
+import { router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
-import Pagination from '@/Components/Pagination.vue';
 import PostBox from '@/Components/PostBox.vue';
 import FollowBox from './Partials/FollowBox.vue';
 import CreatePost from '@/Components/CreatePost.vue';
+
 const props = defineProps({
   posts: {
     type: Object,
@@ -31,9 +32,28 @@ const showCreatePostModal = ref(false);
 // modal data
 const postToShare = ref(null);
 
+// Infinite scrolling state
+const posts = ref(props.posts);
+
+watch(
+  () => props.posts,
+  (newPosts) => {
+    if (newPosts.current_page > 1) {
+      posts.value = {
+        ...newPosts,
+        data: [...posts.value.data, ...newPosts.data],
+      };
+    } else {
+      posts.value = newPosts;
+    }
+  },
+  { deep: true }
+);
+
 function createPost() {
   showCreatePostModal.value = true;
 }
+
 function closeCreatePostModal() {
   showCreatePostModal.value = false;
 }
@@ -42,6 +62,34 @@ function closeShareModal() {
   postToShare.value = null;
   showShareModal.value = false;
 }
+
+function fetchMorePosts() {
+  if (posts.value.next_page_url) {
+    router.visit(posts.value.next_page_url, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['posts'],
+    });
+  }
+}
+
+function handleScroll() {
+  const scrollPosition = window.innerHeight + window.scrollY;
+  const pageHeight = document.documentElement.offsetHeight;
+  const bottomThreshold = 200;
+
+  if (pageHeight - scrollPosition < bottomThreshold) {
+    fetchMorePosts();
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
@@ -76,14 +124,13 @@ function closeShareModal() {
             <template v-for="post in posts.data" :key="post.id">
               <PostBox :post="post" />
             </template>
-            <div class="px-4">
-              <Pagination
-                :first_page_url="posts.first_page_url"
-                :from="posts.from"
-                :last_page="posts.last_page"
-                :last_page_url="posts.last_page_url"
-                :links="posts.links"
-              />
+            <div v-if="posts.next_page_url" class="text-center py-4">
+              <button
+                @click="fetchMorePosts"
+                class="text-sm font-semibold text-gray-500 hover:underline"
+              >
+                Load more posts
+              </button>
             </div>
           </div>
         </div>
