@@ -28,10 +28,7 @@ class PostController extends Controller
             'cover_image' => $request->cover_image == null
                 ? null
                 : $request->file('cover_image')
-                    ->store('images', $request->is_public
-                        ? 'public'
-                        : 'private'
-                    ),
+                    ->store('images', 'public'),
             'is_public' => $request->is_public,
             'is_shared' => $request->is_shared,
             'shared_post_id' => null,
