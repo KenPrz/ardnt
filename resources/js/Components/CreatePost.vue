@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { useToast } from 'vue-toastification';
 import Editor from '@/Components/Editor.vue';
