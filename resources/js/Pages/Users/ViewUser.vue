@@ -1,8 +1,8 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { ref, computed, provide } from 'vue';
+import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue';
+import { router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Pagination from '@/Components/Pagination.vue';
 import ImageUpload from '@/Components/ImageUpload.vue';
 import Edit from '@/Pages/Profile/Edit.vue';
 import Tabbar from '@/Components/Tabbar.vue';
@@ -41,12 +41,60 @@ provide('themes', props.themes);
 const isEditing = ref(false);
 const showCreatePostModal = ref(false);
 
+// Infinite scrolling state
+const userPosts = ref(props.posts.data);
+
+watch(
+  () => props.posts,
+  (newPosts) => {
+    if (newPosts.data.current_page > 1) {
+      userPosts.value = {
+        ...newPosts.data,
+        data: [...userPosts.value.data, ...newPosts.data.data],
+      };
+    } else {
+      userPosts.value = newPosts.data;
+    }
+  },
+  { deep: true }
+);
+
+function fetchMorePosts() {
+  if (userPosts.value.next_page_url) {
+    router.visit(userPosts.value.next_page_url, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['posts'],
+    });
+  }
+}
+
+function handleScroll() {
+  const scrollPosition = window.innerHeight + window.scrollY;
+  const pageHeight = document.documentElement.offsetHeight;
+  const bottomThreshold = 200;
+
+  if (pageHeight - scrollPosition < bottomThreshold) {
+    fetchMorePosts();
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
 function createPost() {
   showCreatePostModal.value = true;
 }
+
 function closeCreatePostModal() {
   showCreatePostModal.value = false;
 }
+
 // Tabs setup
 const tabs = [
   { label: 'Posts', name: 'tab1' },
@@ -290,7 +338,7 @@ const closeModal = () => {
             <template v-slot:tab1>
               <!-- User Posts Section -->
               <section
-                v-if="posts.data.data.length === 0"
+                v-if="userPosts.data.length === 0"
                 class="mx-10 flex flex-col justify-center md:mx-20"
               >
                 <div class="flex flex-col items-center space-y-2">
@@ -303,18 +351,17 @@ const closeModal = () => {
                 </div>
               </section>
               <section
-                v-if="posts.data.data.length > 0"
+                v-if="userPosts.data.length > 0"
                 class="mx-10 flex flex-col justify-center md:mx-20"
               >
-                <UserPosts :posts="posts.data.data" />
-                <div class="px-4">
-                  <Pagination
-                    :first_page_url="posts.data.first_page_url"
-                    :from="posts.data.from"
-                    :last_page="posts.data.last_page"
-                    :last_page_url="posts.data.last_page_url"
-                    :links="posts.data.links"
-                  />
+                <UserPosts :posts="userPosts.data" />
+                <div v-if="userPosts.next_page_url" class="text-center py-4">
+                  <button
+                    @click="fetchMorePosts"
+                    class="text-sm font-semibold text-maroon-500 hover:underline"
+                  >
+                    Load more posts
+                  </button>
                 </div>
               </section>
             </template>

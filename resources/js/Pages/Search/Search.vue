@@ -74,68 +74,69 @@ function fetchMorePosts() {
 <template>
   <AuthenticatedLayout>
     <Head :title="`Search: ` + props.search" />
-    <div class="mx-auto flex max-w-6xl flex-col justify-center py-10">
+    <div class="md:mx-auto flex md:max-w-6xl flex-col justify-center py-10">
       <h1 class="font-customSerif text-3xl font-semibold text-maroon-500">
         Search results for: {{ search }}
       </h1>
-      <div class="flex flex-col items-center py-10">
-        <div class="w-1/2 rounded-lg bg-white p-4 shadow-md">
-          <h2 class="text-xl font-semibold text-gray-900">Users</h2>
-          <div class="mt-4 grid grid-cols-1 gap-4">
-            <div v-if="users.data.length > 0">
-              <UserCard
-                v-for="user in users.data"
-                :key="user.id"
-                :user_id="user.id"
-                :handle="user.handle"
-                :first_name="user.first_name"
-                :last_name="user.last_name"
-                :avatar="user.avatar"
-                :quote="user.quote"
-              />
-            </div>
-            <div v-else>
-              <p class="text-gray-500">No users found</p>
-            </div>
-          </div>
-          <div v-if="users.next_page_url" class="me-2 mt-4 flex justify-end">
-            <button
-              @click="fetchMoreUsers"
-              class="text-sm font-semibold text-gray-500 hover:underline"
-            >
-              load more
-            </button>
-          </div>
-        </div>
-        <div class="mt-5 w-1/2 rounded-lg bg-white p-4 shadow-md">
-          <h2 class="text-xl font-semibold text-gray-900">Posts</h2>
-          <div class="mt-4 grid grid-cols-1 gap-4">
-            <div v-if="posts.data.length > 0">
-              <PostCard
-                class="my-3"
-                v-for="post in posts.data"
-                :key="post.id"
-                :id="post.id"
-                :title="post.title"
-                :content="post.content"
-                :user_handle="post.handle"
-                :created_at="post.created_at"
-              />
-            </div>
-            <div v-else>
-              <p class="text-gray-500">No posts found</p>
-            </div>
-          </div>
-          <div v-if="posts.next_page_url" class="me-2 mt-4 flex justify-end">
-            <button
-              @click="fetchMorePosts"
-              class="text-sm font-semibold text-gray-500 hover:underline"
-            >
-              load more
-            </button>
-          </div>
-        </div>
+      <div class="flex flex-col items-center py-10 px-4">
+  <div class="w-full md:w-3/4 lg:w-1/2 rounded-lg bg-white p-4 shadow-md">
+    <h2 class="text-xl font-semibold text-gray-900">Users</h2>
+    <div class="mt-4 grid grid-cols-1 gap-4">
+      <div v-if="users.data.length > 0">
+        <UserCard
+          v-for="user in users.data"
+          :key="user.id"
+          :user_id="user.id"
+          :handle="user.handle"
+          :first_name="user.first_name"
+          :last_name="user.last_name"
+          :avatar="user.avatar"
+          :quote="user.quote"
+        />
       </div>
+      <div v-else>
+        <p class="text-gray-500">No users found</p>
+      </div>
+    </div>
+    <div v-if="users.next_page_url" class="me-2 mt-4 flex justify-end">
+      <button
+        @click="fetchMoreUsers"
+        class="text-sm font-semibold text-gray-500 hover:underline"
+      >
+        load more
+      </button>
+    </div>
+  </div>
+  <div class="mt-5 w-full md:w-3/4 lg:w-1/2 rounded-lg bg-white p-4 shadow-md">
+    <h2 class="text-xl font-semibold text-gray-900">Posts</h2>
+    <div class="mt-4 grid grid-cols-1 gap-4">
+      <div v-if="posts.data.length > 0">
+        <PostCard
+          class="my-3"
+          v-for="post in posts.data"
+          :key="post.id"
+          :id="post.id"
+          :title="post.title"
+          :content="post.content"
+          :user_handle="post.handle"
+          :created_at="post.created_at"
+        />
+      </div>
+      <div v-else>
+        <p class="text-gray-500">No posts found</p>
+      </div>
+    </div>
+    <div v-if="posts.next_page_url" class="me-2 mt-4 flex justify-end">
+      <button
+        @click="fetchMorePosts"
+        class="text-sm font-semibold text-gray-500 hover:underline"
+      >
+        load more
+      </button>
+    </div>
+  </div>
+</div>
+
     </div>
   </AuthenticatedLayout>
 </template>
