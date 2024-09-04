@@ -11,6 +11,7 @@ import SearchDrawer from '@/Pages/Search/partials/SearchDrawer.vue';
 
 const showingNavigationDropdown = ref(false);
 const showSearch = ref(false);
+const showScrollTop = ref(false);
 
 const handleKeyDown = (event) => {
   if (event.ctrlKey && event.key === 'k') {
@@ -19,12 +20,22 @@ const handleKeyDown = (event) => {
   }
 };
 
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 300;
+};
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('scroll', handleScroll);
 });
 </script>
 
@@ -32,7 +43,7 @@ onUnmounted(() => {
   <SearchDrawer :is-open="showSearch" @close="showSearch = false" />
   <div>
     <div class="min-h-screen bg-yellow-400">
-      <nav class="border-b border-maroon-100 bg-maroon-500">
+      <nav class="border-b border-maroon-100 bg-maroon-500 sticky top-0 z-50">
         <!-- Primary Navigation Menu -->
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 justify-between">
@@ -194,6 +205,24 @@ onUnmounted(() => {
       <!-- Page Content -->
       <main>
         <slot />
+        <transition
+          enter-active-class="transition ease-out duration-300"
+          enter-from-class="opacity-0 translate-y-10"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition ease-in duration-300"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-10"
+        >
+          <button 
+            v-show="showScrollTop"
+            @click="scrollToTop"
+            class="fixed bottom-4 right-4 bg-maroon-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-maroon-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:ring-opacity-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+          </button>
+        </transition>
       </main>
     </div>
   </div>

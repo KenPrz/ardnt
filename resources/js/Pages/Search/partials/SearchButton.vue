@@ -8,8 +8,8 @@ const handleClick = () => {
 <template>
   <button
     @click="handleClick"
-    class="rounded-md p-2 text-gray-400 hover:text-white"
+    class="rounded-md p-2 text-gray-400 hover:text-white flex items-center justify-center space-x-2"
   >
-    <i class="pi pi-search"></i>
+<i class="pi pi-search"></i> <span class="text-xs text-white">ctrl + k</span> 
   </button>
 </template>

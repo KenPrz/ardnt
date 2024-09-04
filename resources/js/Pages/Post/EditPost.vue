@@ -30,6 +30,7 @@ const form = useForm({
   is_public: props.post.is_public,
   is_shared: props.post.is_shared,
   shared_post_id: props.post.shared_post_id,
+  currentRoute: route().current(),
 });
 
 function updatePost() {
@@ -54,7 +55,7 @@ function deletePost() {
       toast.success('Post deleted successfully');
       setTimeout(() => {
         emit('close');
-      }, 500);
+      }, 200);
     },
     onError: (error) => {
       console.log(error);
@@ -125,7 +126,6 @@ function deletePost() {
           <InputError :message="form.errors.theme" />
         </div>
       </div>
-
       <!-- Excerpt -->
       <div
         class="mb-4 text-gray-700"
@@ -144,7 +144,6 @@ function deletePost() {
         </Editor>
         <InputError :message="form.errors.content" />
       </div>
-
       <!-- Shared Post -->
       <div v-if="post.is_shared" class="py-2">
         <OriginalPostContainer
@@ -175,7 +174,6 @@ function deletePost() {
       </button>
     </div>
   </div>
-
   <!-- Delete Confirmation Modal -->
   <Modal maxWidth="md" :show="showDeleteModal" @close="showDeleteModal = false">
     <template #default>
@@ -193,7 +191,7 @@ function deletePost() {
             Cancel
           </button>
           <button
-            @click="deletePost, emit('close')"
+            @click="deletePost"
             class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
           >
             Delete
@@ -203,7 +201,6 @@ function deletePost() {
     </template>
   </Modal>
 </template>
-
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {

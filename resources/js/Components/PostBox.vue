@@ -160,7 +160,7 @@ function closeSharePostModal() {
 
   <!-- Modal for editing post -->
   <Modal maxWidth="xl" :show="showEditPostModal" @close="closeEditPostModal">
-    <EditPost :post="post" />
+    <EditPost :post="post" @close="closeEditPostModal"/>
   </Modal>
 
   <!-- Modal for sharing post -->

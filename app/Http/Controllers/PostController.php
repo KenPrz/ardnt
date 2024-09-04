@@ -9,6 +9,7 @@ use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
 
 class PostController extends Controller
 {
@@ -66,8 +67,12 @@ class PostController extends Controller
         $post->save();
     }
 
+
     /**
-     * Remove the specified resource from storage.
+     * Delete a post.
+     *
+     * @param \Illuminate\Http\Request $request The request object.
+     * @return void Redirects to the user's profile page.
      */
     public function destroy(Request $request)
     {
@@ -77,11 +82,20 @@ class PostController extends Controller
         $post = Post::findOrFail($request->id);
         if ($post->user_id == auth()->id()) {
             $post->delete();
+            if ($request->currentRoute == 'posts.show') {
+                return redirect()->route('users.show', auth()->user()->handle); // Redirect to user's profile since the post is deleted to avoid 404 error
+            }
         } else {
             abort(403);
         }
     }
 
+    /**
+     * Share a post.
+     *
+     * @param  \App\Http\Requests\PostCreationRequest  $request
+     * @return void
+     */
     public function sharePost(PostCreationRequest $request)
     {
         Post::create([

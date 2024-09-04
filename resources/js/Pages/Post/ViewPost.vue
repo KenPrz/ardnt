@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import LikeButton from '@/Components/LikeButton.vue';
 import SharePost from './SharePost.vue';
+import EditPost from '@/Pages/Post/EditPost.vue';
 import Modal from '@/Components/Modal.vue';
 import CommentsContainer from './partials/CommentsContainer.vue';
 import OriginalPostContainer from '@/Components/OriginalPostContainer.vue';
@@ -17,6 +18,15 @@ const props = defineProps({
     default: false,
   },
 });
+
+const showEditPostModal = ref(false);
+function editPost() {
+  showEditPostModal.value = true;
+}
+function closeEditPostModal() {
+  showEditPostModal.value = false;
+}
+
 const isCommentsOpen = ref(false);
 const showSharePostModal = ref(false);
 function sharePost() {
@@ -119,6 +129,17 @@ function toggleComments() {
               :post_to_share="post.original_post ? post.original_post : post"
               :user="$page.props.auth.user"
             />
+          </Modal>
+          <button
+            @click="editPost(post)"
+            v-if="$page.props.auth.user.id == post.user_id"
+            class="flex items-center text-sm text-gray-500"
+          >
+            <i class="pi pi-pencil" style="font-size: 1.2em"></i>
+          </button>
+          <!-- Modal for editing post -->
+          <Modal maxWidth="xl" :show="showEditPostModal" @close="closeEditPostModal">
+            <EditPost :post="post" @close="closeEditPostModal"/>
           </Modal>
         </div>
       </div>
